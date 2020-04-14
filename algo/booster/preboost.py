@@ -31,11 +31,13 @@ def prepare_training_file(model_type, model_name, google_drive_file, google_driv
         similarity_sentence_list.append(list_2[max_ind])
         similarity_list.append(preds[max_ind])
 
-        print(max_ind)
-
     for i in tqdm(range(len(similarity_sentence_list))):
         similarity_sentence = similarity_sentence_list[i]
-        test_df.loc[test_df[column_name] == similarity_sentence, 'A'].iloc[0]
+        quality = test_df.loc[test_df[column_name] == similarity_sentence, 'A'].iloc[0]
+        quality_list.append(quality)
 
+    test_df['similar_sentence'] = similarity_sentence_list
+    test_df['similarity'] = similarity_list
+    test_df['similar_sentence_quality'] = quality_list
 
-
+    return test_df
