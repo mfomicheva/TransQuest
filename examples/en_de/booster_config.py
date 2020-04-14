@@ -1,19 +1,16 @@
 from multiprocessing import cpu_count
 
 SEED = 777
-TEMP_DIRECTORY = "temp/data"
-RESULT_FILE = "result.tsv"
-RESULT_IMAGE = "result.jpg"
+TEMP_DIRECTORY = "booster_temp/data"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
 MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "xlm-roberta-large"
-SIMILARITY_BOOSTING = True
 
-transformer_config = {
-    'output_dir': 'temp/outputs/',
-    "best_model_dir": "temp/outputs/best_model",
-    'cache_dir': 'temp/cache_dir/',
+booster_config = {
+    'output_dir': 'booster_temp/outputs/',
+    "best_model_dir": "booster_temp/outputs/best_model",
+    'cache_dir': 'booster_temp/cache_dir/',
 
     'fp16': False,
     'fp16_opt_level': 'O1',
