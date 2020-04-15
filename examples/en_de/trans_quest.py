@@ -18,7 +18,7 @@ from examples.common.util.normalizer import fit, un_fit
 from examples.en_de.booster_config import BOOSTER_MODEL_TYPE, BOOSTER_MODEL_NAME, BOOSTER_GOOGLE_DRIVE, \
     BOOSTER_DRIVE_FILE_ID, booster_config
 from examples.en_de.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
-    RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID
+    RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, SIMILARITY_BOOSTING
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
@@ -41,11 +41,13 @@ test = test.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_me
 train = fit(train, 'labels')
 test = fit(test, 'labels')
 
-train_boosted = prepare_training_file(model_type=BOOSTER_MODEL_TYPE, model_name=BOOSTER_MODEL_NAME, google_drive_file=BOOSTER_GOOGLE_DRIVE,
+if SIMILARITY_BOOSTING:
+
+    train_boosted = prepare_training_file(model_type=BOOSTER_MODEL_TYPE, model_name=BOOSTER_MODEL_NAME, google_drive_file=BOOSTER_GOOGLE_DRIVE,
                                       google_drive_file_id=BOOSTER_DRIVE_FILE_ID, test_df=train, config=booster_config,
                                       column_name="text_a")
 
-test_boosted = prepare_training_file(model_type=BOOSTER_MODEL_TYPE, model_name=BOOSTER_MODEL_NAME, google_drive_file=BOOSTER_GOOGLE_DRIVE,
+    test_boosted = prepare_training_file(model_type=BOOSTER_MODEL_TYPE, model_name=BOOSTER_MODEL_NAME, google_drive_file=BOOSTER_GOOGLE_DRIVE,
                                       google_drive_file_id=BOOSTER_DRIVE_FILE_ID, test_df=test, config=booster_config,
                                       column_name="text_a", train_df=train)
 
