@@ -3,7 +3,6 @@ from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 
 
-
 def prepare_training_file(test_df, column_name, train_df=None):
 
     embedder = SentenceTransformer('bert-base-nli-mean-tokens')
@@ -14,10 +13,12 @@ def prepare_training_file(test_df, column_name, train_df=None):
     if train_df is not None:
         train_sentence_list = train_df[column_name].tolist()
         train_embeddings = embedder.encode(train_sentence_list)
+        train_quality_list = train_df["labels"].tolist()
 
     else:
         train_sentence_list = test_sentence_list
         train_embeddings = test_embeddings
+        train_quality_list = test_df["labels"].tolist()
 
     similarity_sentence_list = []
     similarity_list = []
@@ -36,12 +37,7 @@ def prepare_training_file(test_df, column_name, train_df=None):
 
         similarity_sentence_list.append(train_sentence_list[idx])
         similarity_list.append(1 - distance)
-
-
-    for i in tqdm(range(len(similarity_sentence_list))):
-        similarity_sentence = similarity_sentence_list[i]
-        quality = test_df.loc[test_df[column_name] == similarity_sentence, 'labels'].iloc[0]
-        quality_list.append(quality)
+        quality_list.append(train_quality_list[idx])
 
     test_df['similar_sentence'] = similarity_sentence_list
     test_df['similarity'] = similarity_list
