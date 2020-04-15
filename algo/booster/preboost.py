@@ -33,7 +33,7 @@ def prepare_training_file(model_type, model_name, google_drive_file, google_driv
 
     for i in tqdm(range(len(similarity_sentence_list))):
         similarity_sentence = similarity_sentence_list[i]
-        quality = test_df.loc[test_df[column_name] == similarity_sentence, 'A'].iloc[0]
+        quality = test_df.loc[test_df[column_name] == similarity_sentence, 'labels'].iloc[0]
         quality_list.append(quality)
 
     test_df['similar_sentence'] = similarity_sentence_list

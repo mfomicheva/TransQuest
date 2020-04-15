@@ -1,11 +1,11 @@
 from multiprocessing import cpu_count
 
 SEED = 777
-TEMP_DIRECTORY = "booster_temp/data"
-GOOGLE_DRIVE = False
-DRIVE_FILE_ID = None
-MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "xlm-roberta-large"
+BOOSTER_TEMP_DIRECTORY = "booster_temp/data"
+BOOSTER_GOOGLE_DRIVE = True
+BOOSTER_DRIVE_FILE_ID = "1wZoYRudhzLmM_Ee0AVaviVMw9aYbL_9Q"
+BOOSTER_MODEL_TYPE = "bert"
+BOOSTER_MODEL_NAME = "booster_temp/bert-base-cased-sts"
 
 booster_config = {
     'output_dir': 'booster_temp/outputs/',
@@ -17,7 +17,7 @@ booster_config = {
     'max_seq_length': 128,
     'train_batch_size': 8,
     'gradient_accumulation_steps': 1,
-    'eval_batch_size': 8,
+    'eval_batch_size': 1024,
     'num_train_epochs': 3,
     'weight_decay': 0,
     'learning_rate': 2e-5,
