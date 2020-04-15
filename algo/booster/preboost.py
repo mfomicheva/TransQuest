@@ -1,11 +1,7 @@
 import scipy
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
-import torch
-from ststransformers.algo.transformer_model import STSTransformerModel
-import numpy as np
 
-from examples.common.util.download import download_from_google_drive
 
 
 def prepare_training_file(test_df, column_name, train_df=None):
