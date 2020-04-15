@@ -43,13 +43,11 @@ test = fit(test, 'labels')
 
 if SIMILARITY_BOOSTING:
 
-    train_boosted = prepare_training_file(model_type=BOOSTER_MODEL_TYPE, model_name=BOOSTER_MODEL_NAME, google_drive_file=BOOSTER_GOOGLE_DRIVE,
-                                      google_drive_file_id=BOOSTER_DRIVE_FILE_ID, test_df=train, config=booster_config,
+    train_boosted = prepare_training_file(test_df=train,
                                       column_name="text_a")
 
-    test_boosted = prepare_training_file(model_type=BOOSTER_MODEL_TYPE, model_name=BOOSTER_MODEL_NAME, google_drive_file=BOOSTER_GOOGLE_DRIVE,
-                                      google_drive_file_id=BOOSTER_DRIVE_FILE_ID, test_df=test, config=booster_config,
-                                      column_name="text_a", train_df=train)
+    test_boosted = prepare_training_file(test_df=test,
+                                    column_name="text_a", train_df=train)
 
 
 if transformer_config["evaluate_during_training"]:

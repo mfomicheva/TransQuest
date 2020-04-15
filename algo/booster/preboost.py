@@ -1,3 +1,5 @@
+import scipy
+from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 import torch
 from ststransformers.algo.transformer_model import STSTransformerModel
@@ -6,30 +8,39 @@ import numpy as np
 from examples.common.util.download import download_from_google_drive
 
 
-def prepare_training_file(model_type, model_name, google_drive_file, google_drive_file_id, test_df, config, column_name, train_df=None):
-    if google_drive_file:
-        download_from_google_drive(google_drive_file_id, model_name)
+def prepare_training_file(test_df, column_name, train_df=None):
 
-    model = STSTransformerModel(model_type, model_name, num_labels=1,
-                                use_cuda=torch.cuda.is_available(), args=config)
+    embedder = SentenceTransformer('bert-base-nli-mean-tokens')
 
-    sentence_list = test_df[column_name].tolist()
+    test_sentence_list = test_df[column_name].tolist()
+    test_embeddings = embedder.encode(test_sentence_list)
+
+    if train_df is not None:
+        train_sentence_list = train_df[column_name].tolist()
+        train_embeddings = embedder.encode(train_sentence_list)
+
+    else:
+        train_sentence_list = test_sentence_list
+        train_embeddings = test_embeddings
+
     similarity_sentence_list = []
     similarity_list = []
     quality_list = []
 
-    for i in tqdm(range(len(sentence_list))):
-        sentence = sentence_list[i]
-        if train_df is None:
-            list_2 = sentence_list[:i] + sentence_list[i+1:]
-        else:
-            list_2 = train_df[column_name].tolist()
-        temp_test = [[sentence, y] for y in list_2]
-        preds, model_outputs = model.predict(temp_test)
-        max_ind = np.argmax(preds)
+    for test_sentence, test_embedding in zip(test_sentence_list, test_embeddings):
+        distances = scipy.spatial.distance.cdist([test_embedding], train_embeddings, "cosine")[0]
 
-        similarity_sentence_list.append(list_2[max_ind])
-        similarity_list.append(preds[max_ind])
+        results = zip(range(len(distances)), distances)
+        results = sorted(results, key=lambda x: x[1])
+
+        if train_df is not None:
+            idx, distance = results[0]
+        else:
+            idx, distance = results[1]
+
+        similarity_sentence_list.append(train_sentence_list[idx])
+        similarity_list.append(1 - distance)
+
 
     for i in tqdm(range(len(similarity_sentence_list))):
         similarity_sentence = similarity_sentence_list[i]
