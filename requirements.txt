@@ -11,4 +11,4 @@ tensorboardX==2.0
 wandb==0.8.29
 seaborn==0.10.0
 GoogleDriveDownloader
-ststransformer==0.0.2
+ststransformer==0.0.3
