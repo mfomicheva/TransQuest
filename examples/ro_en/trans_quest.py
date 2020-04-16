@@ -40,7 +40,6 @@ train = fit(train, 'labels')
 test = fit(test, 'labels')
 
 if AUGMENT_DATA:
-
     nmt_training_file = read_nmt_trainingfile(url=NMT_TRAINING_FILE, file_name=os.path.join(TEMP_DIRECTORY, NMT_TRAINING_FILE.split("/")[-1] ),
                                           path= TEMP_DIRECTORY, source = SOURCE_FILE, target=TARGET_FILE)
 
