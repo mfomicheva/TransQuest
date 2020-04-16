@@ -8,6 +8,10 @@ GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
 AUGMENT_DATA = True
 NMT_TRAINING_FILE = "https://www.quest.dcs.shef.ac.uk/wmt20_files_qe/training_ro-en.tar.gz"
+SOURCE_FILE = "train.roen.ro"
+TARGET_FILE = "train.roen.en"
+AUGMENT_THRESHHOLD = 0.7
+SENTENCE_TRANSFORMER = "bert-large-nli-stsb-mean-tokens"
 MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "xlm-roberta-large"
 

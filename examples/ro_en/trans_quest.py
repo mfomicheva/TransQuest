@@ -7,13 +7,16 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 import numpy as np
 
+from examples.common.util.reader import read_nmt_trainingfile
 from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from examples.common.util.download import download_from_google_drive
 from examples.common.util.draw import draw_scatterplot
 from examples.common.util.normalizer import fit, un_fit
 from examples.ro_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
-    RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID
+    RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, NMT_TRAINING_FILE, SOURCE_FILE, TARGET_FILE, \
+    SENTENCE_TRANSFORMER, AUGMENT_DATA
 from transquest.algo.transformers.run_model import QuestModel
+from transquest.util.augment import augment_file
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
@@ -36,8 +39,21 @@ test = test.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_me
 train = fit(train, 'labels')
 test = fit(test, 'labels')
 
+if AUGMENT_DATA:
 
+    nmt_training_file = read_nmt_trainingfile(url=NMT_TRAINING_FILE, file_name=os.path.join(TEMP_DIRECTORY, NMT_TRAINING_FILE.split("/")[-1] ),
+                                          path= TEMP_DIRECTORY, source = SOURCE_FILE, target=TARGET_FILE)
 
+    train_augmented = augment_file(sentence_encoder=SENTENCE_TRANSFORMER, file=train, nmt_training_file=nmt_training_file, column_name='text_b', other_column_name="text_a",
+                                   nmt_column_name='text_b', nmt_other_column_name="text_a", augment_threshhold=0.7)
+
+    test_augmented = augment_file(sentence_encoder=SENTENCE_TRANSFORMER, file=test,
+                                   nmt_training_file=nmt_training_file, column_name='text_b',
+                                   other_column_name="text_a",
+                                   nmt_column_name='text_b', nmt_other_column_name="text_a", augment_threshhold=0.7)
+
+    train = pd.concat([train, train_augmented, test_augmented], ignore_index=True)
+    train = train.sample(frac=1).reset_index(drop=True)
 
 if transformer_config["evaluate_during_training"]:
     if transformer_config["n_fold"] > 1:
