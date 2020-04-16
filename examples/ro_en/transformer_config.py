@@ -6,6 +6,8 @@ RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
+AUGMENT_DATA = True
+NMT_TRAINING_FILE = "https://www.quest.dcs.shef.ac.uk/wmt20_files_qe/training_ro-en.tar.gz"
 MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "xlm-roberta-large"
 

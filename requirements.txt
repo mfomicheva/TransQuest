@@ -12,3 +12,4 @@ wandb==0.8.29
 seaborn==0.10.0
 GoogleDriveDownloader
 sentence-transformers==0.2.5.1
+progressbar2==3.50.1
