@@ -16,14 +16,14 @@ def augment_file(sentence_encoder, file, nmt_training_file, column_name, other_c
     nmt_other_sentence_list = nmt_training_file[nmt_other_column_name].tolist()
 
     sentence_embeddings = embedder.encode(sentence_list,  batch_size=1024, show_progress_bar=True)
-    nmt_sentence_embeddings = embedder.encode(nmt_sentence_list, batch_size=4096, show_progress_bar=True)
+    nmt_sentence_embeddings = embedder.encode(nmt_sentence_list, batch_size=2048, show_progress_bar=True)
 
     logging.info("Finished getting embeddings")
 
-    del embedder
-
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
+    # del embedder
+    #
+    # if torch.cuda.is_available():
+    #     torch.cuda.empty_cache()
 
     similar_sentence_list = []
     other_sentence_list = []
