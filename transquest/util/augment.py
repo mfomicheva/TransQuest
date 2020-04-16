@@ -3,6 +3,7 @@ import torch
 from sentence_transformers import SentenceTransformer
 
 import pandas as pd
+from tqdm import tqdm
 
 
 def augment_file(sentence_encoder, file, nmt_training_file, column_name, other_column_name, nmt_column_name, nmt_other_column_name, augment_threshhold):
@@ -24,7 +25,7 @@ def augment_file(sentence_encoder, file, nmt_training_file, column_name, other_c
     other_sentence_list = []
     quality_list = []
 
-    for sentence, sentence_embedding in zip(sentence_list, sentence_embeddings):
+    for sentence, sentence_embedding in tqdm(zip(sentence_list, sentence_embeddings), total=len(sentence_list)):
         distances = scipy.spatial.distance.cdist([sentence_embedding], nmt_sentence_embeddings, "cosine")[0]
 
         results = zip(range(len(distances)), distances)
