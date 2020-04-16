@@ -1,3 +1,5 @@
+import logging
+
 import scipy
 import torch
 from sentence_transformers import SentenceTransformer
@@ -15,6 +17,8 @@ def augment_file(sentence_encoder, file, nmt_training_file, column_name, other_c
 
     sentence_embeddings = embedder.encode(sentence_list)
     nmt_sentence_embeddings = embedder.encode(nmt_sentence_list)
+
+    logging.info("Finished getting embeddings")
 
     del embedder
 
