@@ -44,7 +44,7 @@ if AUGMENT_DATA:
                                           path= TEMP_DIRECTORY, source = SOURCE_FILE, target=TARGET_FILE)
 
     augmented_files = augment_file(sentence_encoder=SENTENCE_TRANSFORMER, files=[train, test], nmt_training_file=nmt_training_file, column_name='text_b', other_column_name="text_a",
-                                   nmt_column_name='text_b', nmt_other_column_name="text_a", augment_threshhold=0.7)
+                                   nmt_column_name='text_b', nmt_other_column_name="text_a", augment_threshhold=0.7, cutoff_threshhold=0.4)
 
     train = pd.concat(augmented_files.append(train), ignore_index=True)
     train = train.sample(frac=1).reset_index(drop=True)

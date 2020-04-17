@@ -8,9 +8,10 @@ import pandas as pd
 from tqdm import tqdm
 
 
-def augment_file(sentence_encoder, files, nmt_training_file, column_name, other_column_name, nmt_column_name, nmt_other_column_name, augment_threshhold):
+def augment_file(sentence_encoder, files, nmt_training_file, column_name, other_column_name, nmt_column_name, nmt_other_column_name, augment_threshhold, cutoff_threshhold):
     embedder = SentenceTransformer(sentence_encoder)
-    nmt_sentence_list = nmt_training_file[nmt_column_name].tolist()
+
+    nmt_sentence_list = nmt_training_file[nmt_column_name].tolist()[0:int(nmt_training_file.shape[0]*cutoff_threshhold)]
     nmt_other_sentence_list = nmt_training_file[nmt_other_column_name].tolist()
     nmt_sentence_embeddings = embedder.encode(nmt_sentence_list, batch_size=2048, show_progress_bar=True)
     augmented_files = []
