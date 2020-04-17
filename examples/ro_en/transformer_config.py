@@ -11,7 +11,7 @@ NMT_TRAINING_FILE = "https://www.quest.dcs.shef.ac.uk/wmt20_files_qe/training_ro
 SOURCE_FILE = "train.roen.ro"
 TARGET_FILE = "train.roen.en"
 AUGMENT_THRESHHOLD = 0.7
-SENTENCE_TRANSFORMER = "bert-large-nli-stsb-mean-tokens"
+SENTENCE_TRANSFORMER = "bert-base-nli-stsb-mean-tokens"
 MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "xlm-roberta-large"
 

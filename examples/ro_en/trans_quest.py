@@ -43,15 +43,10 @@ if AUGMENT_DATA:
     nmt_training_file = read_nmt_trainingfile(url=NMT_TRAINING_FILE, file_name=os.path.join(TEMP_DIRECTORY, NMT_TRAINING_FILE.split("/")[-1] ),
                                           path= TEMP_DIRECTORY, source = SOURCE_FILE, target=TARGET_FILE)
 
-    train_augmented = augment_file(sentence_encoder=SENTENCE_TRANSFORMER, file=train, nmt_training_file=nmt_training_file, column_name='text_b', other_column_name="text_a",
+    augmented_files = augment_file(sentence_encoder=SENTENCE_TRANSFORMER, files=[train, test], nmt_training_file=nmt_training_file, column_name='text_b', other_column_name="text_a",
                                    nmt_column_name='text_b', nmt_other_column_name="text_a", augment_threshhold=0.7)
 
-    test_augmented = augment_file(sentence_encoder=SENTENCE_TRANSFORMER, file=test,
-                                   nmt_training_file=nmt_training_file, column_name='text_b',
-                                   other_column_name="text_a",
-                                   nmt_column_name='text_b', nmt_other_column_name="text_a", augment_threshhold=0.7)
-
-    train = pd.concat([train, train_augmented, test_augmented], ignore_index=True)
+    train = pd.concat(augmented_files.append(train), ignore_index=True)
     train = train.sample(frac=1).reset_index(drop=True)
 
 if transformer_config["evaluate_during_training"]:
