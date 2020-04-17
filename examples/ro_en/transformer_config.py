@@ -17,7 +17,7 @@ SEMANTIC_AUGMENT_THRESHOLD = 0.7
 SENTENCE_TRANSFORMER = "bert-base-nli-stsb-mean-tokens"
 
 # Normal Augmentation configurations
-NORMAL_AUGMENTATION = True
+NORMAL_AUGMENTATION = False
 NORMAL_AUGMENTATION_THRESHOLD = 0.01
 
 
