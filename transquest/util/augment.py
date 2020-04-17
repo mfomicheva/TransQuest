@@ -52,7 +52,7 @@ def semantic_augmentation(sentence_encoder, files, nmt_training_file, column_nam
 
 def normal_augmentation(nmt_training_file, threshhold):
 
-    cut_nmt_training_file = nmt_training_file.head(int(int(nmt_training_file.shape[0]*threshhold)))
+    cut_nmt_training_file = nmt_training_file.head(7000)
     cut_nmt_training_file["labels"] = 1.0
 
     return cut_nmt_training_file
