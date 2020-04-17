@@ -18,7 +18,7 @@ SENTENCE_TRANSFORMER = "bert-base-nli-stsb-mean-tokens"
 
 # Normal Augmentation configurations
 NORMAL_AUGMENTATION = True
-NORMAL_AUGMENTATION_THRESHOLD = 0.1
+NORMAL_AUGMENTATION_THRESHOLD = 0.05
 
 
 MODEL_TYPE = "xlmroberta"
@@ -32,7 +32,7 @@ transformer_config = {
     'fp16': False,
     'fp16_opt_level': 'O1',
     'max_seq_length': 80,
-    'train_batch_size': 8,
+    'train_batch_size': 4,
     'gradient_accumulation_steps': 1,
     'eval_batch_size': 8,
     'num_train_epochs': 3,
