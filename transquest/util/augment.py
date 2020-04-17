@@ -42,4 +42,8 @@ def augment_file(sentence_encoder, files, nmt_training_file, column_name, other_
             })
         augmented_files.append(augmented_df)
 
+    del embedder
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
     return augmented_files
