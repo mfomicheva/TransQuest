@@ -8,7 +8,7 @@ import pandas as pd
 from tqdm import tqdm
 
 
-def augment_file(sentence_encoder, files, nmt_training_file, column_name, other_column_name, nmt_column_name, nmt_other_column_name, augment_threshhold, cutoff_threshhold):
+def semantic_augmentation(sentence_encoder, files, nmt_training_file, column_name, other_column_name, nmt_column_name, nmt_other_column_name, augment_threshhold, cutoff_threshhold):
     embedder = SentenceTransformer(sentence_encoder)
 
     nmt_sentence_list = nmt_training_file[nmt_column_name].tolist()[0:int(nmt_training_file.shape[0]*cutoff_threshhold)]
@@ -48,3 +48,15 @@ def augment_file(sentence_encoder, files, nmt_training_file, column_name, other_
         torch.cuda.empty_cache()
 
     return augmented_files
+
+
+def normal_augmentation(nmt_training_file, threshhold):
+
+    cut_nmt_training_file = nmt_training_file.head(int(int(nmt_training_file.shape[0]*threshhold)))
+    cut_nmt_training_file["labels"] = 1.0
+
+    return cut_nmt_training_file
+
+
+
+

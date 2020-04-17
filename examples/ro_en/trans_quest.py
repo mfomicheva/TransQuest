@@ -14,9 +14,9 @@ from examples.common.util.draw import draw_scatterplot
 from examples.common.util.normalizer import fit, un_fit
 from examples.ro_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, NMT_TRAINING_FILE, SOURCE_FILE, TARGET_FILE, \
-    SENTENCE_TRANSFORMER, AUGMENT_DATA
+    SENTENCE_TRANSFORMER, SEMANTIC_AUGMENTATION, NORMAL_AUGMENTATION
 from transquest.algo.transformers.run_model import QuestModel
-from transquest.util.augment import augment_file
+from transquest.util.augment import semantic_augmentation, normal_augmentation
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
@@ -39,14 +39,23 @@ test = test.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_me
 train = fit(train, 'labels')
 test = fit(test, 'labels')
 
-if AUGMENT_DATA:
+if SEMANTIC_AUGMENTATION:
     nmt_training_file = read_nmt_trainingfile(url=NMT_TRAINING_FILE, file_name=os.path.join(TEMP_DIRECTORY, NMT_TRAINING_FILE.split("/")[-1] ),
                                           path= TEMP_DIRECTORY, source = SOURCE_FILE, target=TARGET_FILE)
 
-    augmented_files = augment_file(sentence_encoder=SENTENCE_TRANSFORMER, files=[train, test], nmt_training_file=nmt_training_file, column_name='text_b', other_column_name="text_a",
-                                   nmt_column_name='text_b', nmt_other_column_name="text_a", augment_threshhold=0.7, cutoff_threshhold=0.3)
+    augmented_files = semantic_augmentation(sentence_encoder=SENTENCE_TRANSFORMER, files=[train, test], nmt_training_file=nmt_training_file, column_name='text_b', other_column_name="text_a",
+                                            nmt_column_name='text_b', nmt_other_column_name="text_a", augment_threshhold=0.7, cutoff_threshhold=0.3)
 
     train = pd.concat(augmented_files.append(train), ignore_index=True)
+    train = train.sample(frac=1).reset_index(drop=True)
+
+if NORMAL_AUGMENTATION:
+    nmt_training_file = read_nmt_trainingfile(url=NMT_TRAINING_FILE,
+                                              file_name=os.path.join(TEMP_DIRECTORY, NMT_TRAINING_FILE.split("/")[-1]),
+                                              path=TEMP_DIRECTORY, source=SOURCE_FILE, target=TARGET_FILE)
+
+    augment_file = normal_augmentation(nmt_training_file=nmt_training_file, threshhold=0.1)
+    train = pd.concat([train, augment_file], ignore_index=True)
     train = train.sample(frac=1).reset_index(drop=True)
 
 if transformer_config["evaluate_during_training"]:

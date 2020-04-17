@@ -6,12 +6,21 @@ RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
-AUGMENT_DATA = True
+
 NMT_TRAINING_FILE = "https://www.quest.dcs.shef.ac.uk/wmt20_files_qe/training_ro-en.tar.gz"
 SOURCE_FILE = "train.roen.ro"
 TARGET_FILE = "train.roen.en"
-AUGMENT_THRESHHOLD = 0.7
+
+# Semantic Augmentation configuration
+SEMANTIC_AUGMENTATION = False
+SEMANTIC_AUGMENT_THRESHOLD = 0.7
 SENTENCE_TRANSFORMER = "bert-base-nli-stsb-mean-tokens"
+
+# Normal Augmentation configurations
+NORMAL_AUGMENTATION = True
+NORMAL_AUGMENTATION_THRESHOLD = 0.1
+
+
 MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "xlm-roberta-large"
 
