@@ -18,7 +18,7 @@ SENTENCE_TRANSFORMER = "bert-base-nli-stsb-mean-tokens"
 
 # Normal Augmentation configurations
 NORMAL_AUGMENTATION = True
-NORMAL_AUGMENTATION_THRESHOLD = 0.05
+NORMAL_AUGMENTATION_THRESHOLD = 0.01
 
 
 MODEL_TYPE = "xlmroberta"
