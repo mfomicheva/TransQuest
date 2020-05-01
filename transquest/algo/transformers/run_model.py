@@ -68,6 +68,7 @@ try:
 except ImportError:
     torch_xla_available = False
 
+
 class QuestModel:
     def __init__(
         self, model_type, model_name, num_labels=None, weight=None, args=None, use_cuda=True, use_tpu=False, cuda_device=-1, **kwargs,
