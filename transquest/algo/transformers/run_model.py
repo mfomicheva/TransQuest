@@ -61,10 +61,16 @@ try:
 except ImportError:
     wandb_available = False
 
+try:
+    import torch_xla
+    import torch_xla.core.xla_model as xm
+    torch_xla_available = True
+except ImportError:
+    torch_xla_available = False
 
 class QuestModel:
     def __init__(
-        self, model_type, model_name, num_labels=None, weight=None, args=None, use_cuda=True, cuda_device=-1, **kwargs,
+        self, model_type, model_name, num_labels=None, weight=None, args=None, use_cuda=True, use_tpu=False, cuda_device=-1, **kwargs,
     ):
 
         """
@@ -120,6 +126,18 @@ class QuestModel:
                     "'use_cuda' set to True when cuda is unavailable."
                     " Make sure CUDA is available or set use_cuda=False."
                 )
+
+        elif use_tpu:
+            if torch_xla_available:
+                self.device = xm.xla_device()
+
+            else:
+                raise ValueError(
+                    "'use_tpu' set to True when cuda is unavailable."
+                    " Make sure pytorch xla is instlled or set use_tpu=False."
+                )
+
+
         else:
             self.device = "cpu"
 
@@ -361,7 +379,12 @@ class QuestModel:
                     else:
                         torch.nn.utils.clip_grad_norm_(model.parameters(), args["max_grad_norm"])
 
-                    optimizer.step()
+                    if torch_xla_available:
+                        xm.optimizer_step(optimizer, barrier=True)
+
+                    else:
+                        optimizer.step()
+
                     scheduler.step()  # Update learning rate schedule
                     model.zero_grad()
                     global_step += 1
