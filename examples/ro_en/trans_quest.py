@@ -14,7 +14,7 @@ from examples.common.util.draw import draw_scatterplot
 from examples.common.util.normalizer import fit, un_fit
 from examples.ro_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID, NMT_TRAINING_FILE, SOURCE_FILE, TARGET_FILE, \
-    SENTENCE_TRANSFORMER, SEMANTIC_AUGMENTATION, NORMAL_AUGMENTATION
+    SENTENCE_TRANSFORMER, SEMANTIC_AUGMENTATION, NORMAL_AUGMENTATION, SEMANTIC_AUGMENT_THRESHOLD
 from transquest.algo.transformers.run_model import QuestModel
 from transquest.util.augment import semantic_augmentation, normal_augmentation
 
@@ -44,7 +44,7 @@ if SEMANTIC_AUGMENTATION:
                                           path= TEMP_DIRECTORY, source = SOURCE_FILE, target=TARGET_FILE)
 
     augmented_files = semantic_augmentation(sentence_encoder=SENTENCE_TRANSFORMER, files=[train, test], nmt_training_file=nmt_training_file, column_name='text_b', other_column_name="text_a",
-                                            nmt_column_name='text_b', nmt_other_column_name="text_a", augment_threshhold=0.7, cutoff_threshhold=0.3)
+                                            nmt_column_name='text_b', nmt_other_column_name="text_a", augment_threshhold=SEMANTIC_AUGMENT_THRESHOLD)
 
     train = pd.concat(augmented_files.append(train), ignore_index=True)
     train = train.sample(frac=1).reset_index(drop=True)

@@ -12,8 +12,8 @@ SOURCE_FILE = "train.roen.ro"
 TARGET_FILE = "train.roen.en"
 
 # Semantic Augmentation configuration
-SEMANTIC_AUGMENTATION = False
-SEMANTIC_AUGMENT_THRESHOLD = 0.7
+SEMANTIC_AUGMENTATION = True
+SEMANTIC_AUGMENT_THRESHOLD = 0.9
 SENTENCE_TRANSFORMER = "bert-base-nli-stsb-mean-tokens"
 
 # Normal Augmentation configurations
