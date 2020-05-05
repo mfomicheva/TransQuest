@@ -17,9 +17,11 @@ def semantic_augmentation(sentence_encoder, files, nmt_training_file, column_nam
 
     nmt_sentence_list = nmt_training_file[nmt_column_name].tolist()
     nmt_other_sentence_list = nmt_training_file[nmt_other_column_name].tolist()
-    nmt_sentence_embeddings = []
-    for x in tqdm(batch(nmt_sentence_list, 1024), total=int(len(nmt_sentence_list)/1024)):
-        nmt_sentence_embeddings.extend(embedder.encode(x, batch_size=1024, show_progress_bar=True))
+    # nmt_sentence_embeddings = []
+    # for x in tqdm(batch(nmt_sentence_list, 1024), total=int(len(nmt_sentence_list)/1024)):
+    #     nmt_sentence_embeddings.extend(embedder.encode(x, batch_size=1024, show_progress_bar=True))
+
+    nmt_sentence_embeddings = embedder.encode(nmt_sentence_list, batch_size=1024, show_progress_bar=True)
 
     augmented_files = []
     for file in files:
