@@ -34,4 +34,9 @@ setup(
         "tokenizers",
         "wandb"
     ],
+    entry_points={
+        "console_scripts": [
+            'tq-predict=examples.common.predict:main',
+        ]
+    }
 )
