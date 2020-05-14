@@ -18,12 +18,15 @@ from examples.common.config.train_config import MODEL_NAME
 from examples.common.config.train_config import SEED
 
 
-def read_data_files(train_file, test_file):
+def read_data_files(train_file, test_file, inject_features=None):
     train = pd.read_csv(train_file, sep='\t', error_bad_lines=False)
     test = pd.read_csv(test_file, sep='\t', error_bad_lines=False)
 
-    train = train[['original', 'translation', 'z_mean']]
-    test = test[['original', 'translation', 'z_mean']]
+    select_columns = ['original', 'translation', 'z_mean']
+    if inject_features is not None:
+        select_columns.extend(inject_features)
+    train = train[select_columns]
+    test = test[select_columns]
 
     train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
     test = test.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
@@ -39,16 +42,17 @@ def main():
     parser.add_argument('--results_fname')
     parser.add_argument('--train_path')
     parser.add_argument('--test_path')
+    parser.add_argument('--inject_features')
     args = parser.parse_args()
 
     if not os.path.exists(args.temp_dir):
         os.makedirs(args.temp_dir)
 
-    train, test = read_data_files(args.train_path, args.test_path)
+    train, test = read_data_files(args.train_path, args.test_path, inject_features=args.inject_features)
     if train_config['evaluate_during_training']:
         if train_config['n_fold'] > 1:
             test_preds = np.zeros((len(test), train_config['n_fold']))
-            for i in range(train_config["n_fold"]):
+            for i in range(train_config['n_fold']):
 
                 if os.path.exists(train_config['output_dir']) and os.path.isdir(train_config['output_dir']):
                     shutil.rmtree(train_config['output_dir'])
@@ -80,9 +84,11 @@ def main():
                                                                         mae=mean_absolute_error)
             test['predictions'] = model_outputs
     else:
-        model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
-                           args=train_config)
-        model.train_model(train, pearson_corr=pearson_corr, spearman_corr=spearman_corr, mae=mean_absolute_error)
+        model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(), args=train_config)
+        model.train_model(
+            train, pearson_corr=pearson_corr, spearman_corr=spearman_corr, mae=mean_absolute_error,
+            inject_features=args.inject_features
+        )
         result, model_outputs, wrong_predictions = model.eval_model(test, pearson_corr=pearson_corr,
                                                                     spearman_corr=spearman_corr,
                                                                     mae=mean_absolute_error)
