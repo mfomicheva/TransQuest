@@ -8,9 +8,9 @@ from algo.transformers.evaluation import pearson_corr, spearman_corr
 from sklearn.metrics import mean_absolute_error
 
 from examples.common.util.normalizer import fit, un_fit
-from examples.common.predict_config import predict_config
-from examples.common.predict_config import MODEL_TYPE
-from examples.common.predict_config import MODEL_NAME
+from examples.common.config.predict_config import predict_config
+from examples.common.config.predict_config import MODEL_TYPE
+from examples.common.config.predict_config import MODEL_NAME
 from examples.common.util.draw import draw_scatterplot
 
 
