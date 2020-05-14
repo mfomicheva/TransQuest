@@ -7,10 +7,6 @@ MODEL_TYPE = "xlmroberta"
 MODEL_NAME = "xlm-roberta-base"
 
 train_config = {
-    'output_dir': 'temp/outputs/',
-    "best_model_dir": "temp/outputs/best_model",
-    'cache_dir': 'temp/cache_dir/',
-
     'fp16': False,
     'fp16_opt_level': 'O1',
     'max_seq_length': 128,

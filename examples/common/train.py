@@ -43,10 +43,17 @@ def main():
     parser.add_argument('--train_path')
     parser.add_argument('--test_path')
     parser.add_argument('--inject_features')
+    parser.add_argument('--output_dir')
     args = parser.parse_args()
 
     if not os.path.exists(args.temp_dir):
         os.makedirs(args.temp_dir)
+
+    train_config.update({
+        'output_dir': os.path.join(args.output_dir, 'outputs'),
+        'best_model_dir': os.path.join(args.output_dir, 'best_model'),
+        'cache_dir': os.path.join(args.output_dir, 'cache_dir')
+    })
 
     train, test = read_data_files(args.train_path, args.test_path, inject_features=args.inject_features)
     if train_config['evaluate_during_training']:
