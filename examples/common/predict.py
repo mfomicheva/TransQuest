@@ -1,4 +1,5 @@
 import os
+import csv
 import argparse
 import pandas as pd
 import torch
@@ -15,7 +16,7 @@ from examples.common.util.draw import draw_scatterplot
 
 
 def read_test_file(test_file):
-    test = pd.read_csv(test_file, sep='\t', error_bad_lines=False)
+    test = pd.read_csv(test_file, sep='\t', quoting=csv.QUOTE_NONE)
     test = test[['original', 'translation', 'z_mean']]
     test = test.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
     test = fit(test, 'labels')
