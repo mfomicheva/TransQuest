@@ -1,3 +1,4 @@
+import os
 import argparse
 import pandas as pd
 import torch
@@ -25,10 +26,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--test_file')
     parser.add_argument('-m', '--model_dir')
-    parser.add_argument('-o', '--output_pref')
+    parser.add_argument('-o', '--output_dir')
     args = parser.parse_args()
 
-    predict_config.update({'best_model_dir': args.model_dir})
+    predict_config.update({'best_model_dir': args.model_dir, 'output_dir': args.output_dir, 'cache_dir': args.output_dir})
     model = QuestModel(MODEL_TYPE, predict_config['best_model_dir'], num_labels=1,
                        use_cuda=torch.cuda.is_available(), args=predict_config)
     test = read_test_file(args.test_file)
@@ -38,9 +39,12 @@ def main():
     test['predictions'] = model_outputs
     test = un_fit(test, 'labels')
     test = un_fit(test, 'predictions')
-    output = '{}.{}.{}'.format(args.output_pref, MODEL_TYPE, MODEL_NAME)
-    test.to_csv('{}.tsv'.format(output), header=True, sep='\t', index=False, encoding='utf-8')
-    draw_scatterplot(test, 'labels', 'predictions', '{}.png'.format(output), MODEL_TYPE + ' ' + MODEL_NAME)
+    out_preds = os.path.join(args.output_dir, 'predictions')
+    out_preds = '{}.{}.{}'.format(out_preds, MODEL_TYPE, MODEL_NAME)
+    out_scatter = os.path.join(args.output_dir, 'scatter')
+    out_scatter = '{}.{}.{}'.format(out_scatter, MODEL_TYPE, MODEL_NAME)
+    test.to_csv('{}.tsv'.format(out_preds), header=True, sep='\t', index=False, encoding='utf-8')
+    draw_scatterplot(test, 'labels', 'predictions', '{}.png'.format(out_scatter), MODEL_TYPE + ' ' + MODEL_NAME)
 
 
 if __name__ == '__main__':

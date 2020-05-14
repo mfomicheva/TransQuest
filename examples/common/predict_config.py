@@ -5,7 +5,6 @@ MODEL_NAME = 'xlm-roberta-base'
 
 
 predict_config = {
-    'best_model_dir': 'models/best_model',
     'max_seq_length': 128,
     'eval_batch_size': 8,
     'regression': True,
@@ -15,4 +14,11 @@ predict_config = {
     'silent': False,
     'manual_seed': 777,
     'encoding': None,
+    'do_lower_case': False,
+    'wandb_project': None,
+    'wandb_kwargs': {},
+    'no_cache': False,
+    'overwrite_output_dir': True,
+    'reprocess_input_data': True,
+    'use_cached_eval_features': False,
 }
