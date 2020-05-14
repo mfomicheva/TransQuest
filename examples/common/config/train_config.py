@@ -4,7 +4,7 @@ SEED = 777
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = None
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "xlm-roberta-large"
+MODEL_NAME = "xlm-roberta-base"
 
 train_config = {
     'output_dir': 'temp/outputs/',
@@ -31,7 +31,7 @@ train_config = {
     "no_cache": False,
     'save_model_every_epoch': True,
     'n_fold': 5,
-    'evaluate_during_training': False,
+    'evaluate_during_training': True,
     'evaluate_during_training_steps': 300,
     "evaluate_during_training_verbose": True,
     'use_cached_eval_features': False,
