@@ -38,16 +38,12 @@ def read_data_files(train_file, test_file, inject_features=None):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--temp_dir')
     parser.add_argument('--results_fname')
     parser.add_argument('--train_path')
     parser.add_argument('--test_path')
     parser.add_argument('--inject_features')
     parser.add_argument('--output_dir')
     args = parser.parse_args()
-
-    if not os.path.exists(args.temp_dir):
-        os.makedirs(args.temp_dir)
 
     train_config.update({
         'output_dir': os.path.join(args.output_dir, 'outputs'),
@@ -103,8 +99,8 @@ def main():
 
     test = un_fit(test, 'labels')
     test = un_fit(test, 'predictions')
-    test.to_csv(os.path.join(args.temp_dir, '{}.tsv'.format(args.results_fname)), header=True, sep='\t', index=False, encoding='utf-8')
-    draw_scatterplot(test, 'labels', 'predictions', os.path.join(args.temp_dir, '{}.png'.format(args.results_fname)),
+    test.to_csv(os.path.join(args.output_dir, '{}.tsv'.format(args.results_fname)), header=True, sep='\t', index=False, encoding='utf-8')
+    draw_scatterplot(test, 'labels', 'predictions', os.path.join(args.output_dir, '{}.png'.format(args.results_fname)),
                      MODEL_TYPE + ' ' + MODEL_NAME)
 
 
