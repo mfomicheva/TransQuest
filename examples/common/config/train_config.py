@@ -56,4 +56,5 @@ train_config = {
     "manual_seed": 777,
 
     "encoding": None,
+    "num_features": 1,
 }

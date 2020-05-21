@@ -172,7 +172,8 @@ class QuestModel:
         args=None,
         eval_df=None,
         verbose=True,
-        **kwargs,
+        model_scores=False,
+        **kwargs
     ):
         """
         Trains the model using 'train_df'
@@ -225,8 +226,11 @@ class QuestModel:
             raise ValueError(
                 "Passed DataFrame is not in the correct format. Please rename your columns to text_a, text_b and labels"
             )
+        if "model_scores" in train_df.columns:
+            for i, ex in enumerate(train_examples):
+                ex.model_score = train_df["model_scores"][i]
 
-        train_dataset = self.load_and_cache_examples(train_examples, verbose=verbose)
+        train_dataset = self.load_and_cache_examples(train_examples, verbose=verbose, use_model_scores=model_scores)
 
         os.makedirs(output_dir, exist_ok=True)
 
@@ -641,7 +645,7 @@ class QuestModel:
         return results, model_outputs, wrong
 
     def load_and_cache_examples(
-        self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False
+        self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False, use_model_scores=False
     ):
         """
         Converts a list of InputExample objects to a TensorDataset containing InputFeatures. Caches the InputFeatures.
@@ -722,13 +726,18 @@ class QuestModel:
         all_input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
         all_input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
         all_segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
+        if use_model_scores:
+            all_model_scores = torch.tensor([f.model_score for f in features], dtype=torch.float)
 
         if output_mode == "classification":
             all_label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
         elif output_mode == "regression":
             all_label_ids = torch.tensor([f.label_id for f in features], dtype=torch.float)
 
-        dataset = TensorDataset(all_input_ids, all_input_mask, all_segment_ids, all_label_ids)
+        if use_model_scores:
+            dataset = TensorDataset(all_input_ids, all_input_mask, all_segment_ids, all_label_ids, all_model_scores)
+        else:
+            dataset = TensorDataset(all_input_ids, all_input_mask, all_segment_ids, all_label_ids)
 
         if args["sliding_window"] and evaluate:
             return dataset, window_counts
@@ -893,7 +902,10 @@ class QuestModel:
         self.model.to(self.device)
 
     def _get_inputs_dict(self, batch):
-        inputs = {"input_ids": batch[0], "attention_mask": batch[1], "labels": batch[3]}
+        try:
+            inputs = {"input_ids": batch[0], "attention_mask": batch[1], "labels": batch[3], "model_score": batch[4]}
+        except IndexError:
+            inputs = {"input_ids": batch[0], "attention_mask": batch[1], "labels": batch[3], "model_score": None}
 
         # XLM, DistilBERT and RoBERTa don't use segment_ids
         if self.args["model_type"] != "distilbert":

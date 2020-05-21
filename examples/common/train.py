@@ -41,7 +41,7 @@ def main():
     parser.add_argument('--results_fname')
     parser.add_argument('--train_path')
     parser.add_argument('--test_path')
-    parser.add_argument('--inject_features')
+    parser.add_argument('--inject_features', nargs='+', default=None)
     parser.add_argument('--output_dir')
     args = parser.parse_args()
 
@@ -64,7 +64,7 @@ def main():
                                    args=train_config)
                 train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
                 model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
-                                  mae=mean_absolute_error)
+                                  mae=mean_absolute_error, model_scores=bool(args.inject_features))
                 model = QuestModel(MODEL_TYPE, train_config['best_model_dir'], num_labels=1,
                                    use_cuda=torch.cuda.is_available(), args=train_config)
                 result, model_outputs, wrong_predictions = model.eval_model(test, pearson_corr=pearson_corr,
