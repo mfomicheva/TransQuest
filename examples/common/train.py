@@ -22,11 +22,17 @@ def read_data_files(train_file, test_file, inject_features=None):
     train = pd.read_csv(train_file, sep='\t')
     test = pd.read_csv(test_file, sep='\t')
 
+    print('Train contains {} segments'.format(len(train)))
+    print('Test contains {} segments'.format(len(test)))
+
     select_columns = ['original', 'translation', 'z_mean']
     if inject_features is not None:
         select_columns.extend(inject_features)
     train = train[select_columns]
     test = test[select_columns]
+
+    print('Train contains {} segments'.format(len(train)))
+    print('Test contains {} segments'.format(len(test)))
 
     train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
     test = test.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()

@@ -14,7 +14,7 @@ class TestData(unittest.TestCase):
     def test_reads_data(self):
         train_tsv = os.path.join(data_dir, 'et-en', 'train.eten.df.short.tsv')
         test_tsv = os.path.join(data_dir, 'et-en', 'dev.eten.df.short.tsv')
-        train_df, test_df = read_data_files(train_tsv, test_tsv)
+        train_df, test_df = read_data_files(train_tsv, test_tsv, inject_features=True)
         assert len(train_df) == 7000
         assert len(test_df) == 1000
 
