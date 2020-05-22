@@ -55,6 +55,9 @@ from algo.transformers.models.xlm_roberta_model import XLMRobertaForSequenceClas
 from algo.transformers.models.xlnet_model import XLNetForSequenceClassification
 from algo.transformers.utils import InputExample, convert_examples_to_features
 
+from examples.common.util.data import load_examples
+
+
 try:
     import wandb
     wandb_available = True
@@ -215,20 +218,7 @@ class QuestModel:
 
         self._move_model_to_device()
 
-        if "text_a" in train_df.columns and "text_b" in train_df.columns:
-            train_examples = [
-                InputExample(i, text_a, text_b, label)
-                for i, (text_a, text_b, label) in enumerate(
-                    zip(train_df["text_a"], train_df["text_b"], train_df["labels"])
-                )
-            ]
-        else:
-            raise ValueError(
-                "Passed DataFrame is not in the correct format. Please rename your columns to text_a, text_b and labels"
-            )
-        if "model_scores" in train_df.columns:
-            for i, ex in enumerate(train_examples):
-                ex.model_score = train_df["model_scores"][i]
+        train_examples = load_examples(train_df)
 
         train_dataset = self.load_and_cache_examples(train_examples, verbose=verbose, use_model_scores=model_scores)
 
@@ -267,6 +257,8 @@ class QuestModel:
 
         Utility function to be used by the train_model() method. Not intended to be used directly.
         """
+
+        print('Model will be evaluated on {} examples'.format(len(eval_df)))
 
         device = self.device
         model = self.model
@@ -515,6 +507,8 @@ class QuestModel:
 
         self._move_model_to_device()
 
+        print('Evaluation set contains {} examples'.format(len(eval_df)))
+
         result, model_outputs, wrong_preds = self.evaluate(
             eval_df, output_dir, multi_label=multi_label, verbose=verbose, silent=silent, **kwargs
         )
@@ -538,27 +532,8 @@ class QuestModel:
         eval_output_dir = output_dir
 
         results = {}
-
-        if "text" in eval_df.columns and "labels" in eval_df.columns:
-            eval_examples = [
-                InputExample(i, text, None, label)
-                for i, (text, label) in enumerate(zip(eval_df["text"], eval_df["labels"]))
-            ]
-        elif "text_a" in eval_df.columns and "text_b" in eval_df.columns:
-            eval_examples = [
-                InputExample(i, text_a, text_b, label)
-                for i, (text_a, text_b, label) in enumerate(
-                    zip(eval_df["text_a"], eval_df["text_b"], eval_df["labels"])
-                )
-            ]
-        else:
-            warnings.warn(
-                "Dataframe headers not specified. Falling back to using column 0 as text and column 1 as labels."
-            )
-            eval_examples = [
-                InputExample(i, text, None, label)
-                for i, (text, label) in enumerate(zip(eval_df.iloc[:, 0], eval_df.iloc[:, 1]))
-            ]
+        eval_examples = load_examples(eval_df)
+        print('Loaded {} examples for evaluation'.format(len(eval_examples)))
 
         if args["sliding_window"]:
             eval_dataset, window_counts = self.load_and_cache_examples(
@@ -633,6 +608,7 @@ class QuestModel:
             if not multi_label:
                 preds = np.argmax(preds, axis=1)
 
+        print('Computing metric on {} examples'.format(len(eval_examples)))
         result, wrong = self.compute_metrics(preds, out_label_ids, eval_examples, **kwargs)
         result["eval_loss"] = eval_loss
         results.update(result)
