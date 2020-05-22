@@ -57,6 +57,7 @@ def main():
     if train_config['evaluate_during_training']:
         if train_config['n_fold'] > 1:
             test_preds = np.zeros((len(test), train_config['n_fold']))
+            print(test_preds.shape)
             for i in range(train_config['n_fold']):
                 print('Training with N folds. Now N is {}'.format(i))
                 if os.path.exists(train_config['output_dir']) and os.path.isdir(train_config['output_dir']):
