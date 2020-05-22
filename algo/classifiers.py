@@ -13,8 +13,9 @@ class RobertaClassificationHeadInjection(RobertaClassificationHead):
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
 
-        self.reduce = nn.Linear(config.hidden_size, 1)
-        self.out_proj_reduced = nn.Linear(2, config.num_labels)
+        self.inject_reduce = nn.Linear(config.hidden_size, 1)
+        self.inject_dense = nn.Linear(2, 2)
+        self.inject_out_proj = nn.Linear(2, config.num_labels)
 
     def forward(self, features, model_score=None, **kwargs):
         batch_dim, max_len, hidd_dim = features.shape
@@ -27,11 +28,12 @@ class RobertaClassificationHeadInjection(RobertaClassificationHead):
         if model_score is not None:
             model_score = model_score.unsqueeze(1)  # shape: (B, H)
             assert model_score.shape == (batch_dim, 1)
-            x = self.reduce(x)
+            x = self.inject_reduce(x)
             assert x.shape == (batch_dim, 1)
             x = torch.cat((x, model_score), 1)
             assert x.shape == (batch_dim, 2)
-            x = self.out_proj_reduced(x)
+            x = self.inject_dense(x)
+            x = self.inject_out_proj(x)
         else:
             x = self.out_proj(x)
         return x
