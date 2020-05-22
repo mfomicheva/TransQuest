@@ -1,6 +1,6 @@
 import os
 
-from unittest import TestCase
+import unittest
 
 from examples.common.train import read_data_files
 from examples.common.util.data import load_examples
@@ -9,7 +9,7 @@ test_dir = os.path.dirname(os.path.realpath(__file__))
 data_dir = os.path.join(test_dir, '../data')
 
 
-class TestData(TestCase):
+class TestData(unittest.TestCase):
 
     def test_reads_data(self):
         train_tsv = os.path.join(data_dir, 'et-en', 'train.eten.df.short.tsv')
@@ -24,3 +24,7 @@ class TestData(TestCase):
         train_df, test_df = read_data_files(train_tsv, test_tsv)
         examples = load_examples(test_df)
         print(len(examples))
+
+
+if __name__ == '__main__':
+    unittest.main()
