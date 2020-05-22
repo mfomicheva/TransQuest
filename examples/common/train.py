@@ -19,8 +19,8 @@ from examples.common.config.train_config import SEED
 
 
 def read_data_files(train_file, test_file, inject_features=None):
-    train = pd.read_csv(train_file, sep='\t', error_bad_lines=False)
-    test = pd.read_csv(test_file, sep='\t', error_bad_lines=False)
+    train = pd.read_csv(train_file, sep='\t')
+    test = pd.read_csv(test_file, sep='\t')
 
     select_columns = ['original', 'translation', 'z_mean']
     if inject_features is not None:
