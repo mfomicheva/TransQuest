@@ -17,16 +17,20 @@ class RobertaClassificationHeadInjection(RobertaClassificationHead):
         self.out_proj_reduced = nn.Linear(2, config.num_labels)
 
     def forward(self, features, model_score=None, **kwargs):
+        batch_dim, max_len, hidd_dim = features.shape
         x = features[:, 0, :]  # take <s> token (equiv. to [CLS])
         x = self.dropout(x)
         x = self.dense(x)
         x = torch.tanh(x)
-        x = self.dropout(x)
+        x = self.dropout(x)  # shape: (B, H)
+        assert x.shape == (batch_dim, hidd_dim)
         if model_score is not None:
-            model_score = model_score.unsqueeze(0)
+            model_score = model_score.unsqueeze(1)  # shape: (B, H)
+            assert model_score.shape == (batch_dim, 1)
             x = self.reduce(x)
-            x = torch.cat((x, model_score), 0)
-            x = x.transpose(1, 0)
+            assert x.shape == (batch_dim, 1)
+            x = torch.cat((x, model_score), 1)
+            assert x.shape == (batch_dim, 2)
             x = self.out_proj_reduced(x)
         else:
             x = self.out_proj(x)
