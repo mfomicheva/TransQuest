@@ -33,6 +33,8 @@ def read_data_files(train_file, test_file, inject_features=None):
 
     train = fit(train, 'labels')
     test = fit(test, 'labels')
+    print('Train contains {} segments'.format(len(train)))
+    print('Test contains {} segments'.format(len(test)))
     return train, test
 
 
