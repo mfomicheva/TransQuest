@@ -56,17 +56,19 @@ def main():
         if train_config['n_fold'] > 1:
             test_preds = np.zeros((len(test), train_config['n_fold']))
             for i in range(train_config['n_fold']):
-
+                print('Training with N folds. Now N is {}'.format(i))
                 if os.path.exists(train_config['output_dir']) and os.path.isdir(train_config['output_dir']):
                     shutil.rmtree(train_config['output_dir'])
 
                 model = QuestModel(MODEL_TYPE, MODEL_NAME, num_labels=1, use_cuda=torch.cuda.is_available(),
                                    args=train_config)
-                train, eval_df = train_test_split(train, test_size=0.1, random_state=SEED * i)
-                model.train_model(train, eval_df=eval_df, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
+                train_n, eval_df_n = train_test_split(train, test_size=0.1, random_state=SEED * i)
+                print('Created train set with {} examples and eval set with {} examples'.format(len(train), len(eval_df_n)))
+                model.train_model(train_n, eval_df=eval_df_n, pearson_corr=pearson_corr, spearman_corr=spearman_corr,
                                   mae=mean_absolute_error, model_scores=bool(args.inject_features))
                 model = QuestModel(MODEL_TYPE, train_config['best_model_dir'], num_labels=1,
                                    use_cuda=torch.cuda.is_available(), args=train_config)
+
                 result, model_outputs, wrong_predictions = model.eval_model(test, pearson_corr=pearson_corr,
                                                                             spearman_corr=spearman_corr,
                                                                             mae=mean_absolute_error)
