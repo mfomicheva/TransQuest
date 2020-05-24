@@ -3,7 +3,6 @@ import os
 import shutil
 
 import numpy as np
-import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
@@ -11,42 +10,18 @@ from sklearn.model_selection import train_test_split
 from algo.transformers.evaluation import pearson_corr, spearman_corr
 from algo.transformers.run_model import QuestModel
 from examples.common.util.draw import draw_scatterplot
-from examples.common.util.normalizer import fit, un_fit
+
 from examples.common.config.train_config import train_config
 from examples.common.config.train_config import MODEL_TYPE
 from examples.common.config.train_config import MODEL_NAME
 from examples.common.config.train_config import SEED
 
-
-def read_data_files(train_file, test_file, inject_features=None):
-    train = pd.read_csv(train_file, sep='\t')
-    test = pd.read_csv(test_file, sep='\t')
-
-    print('Train contains {} segments'.format(len(train)))
-    print('Test contains {} segments'.format(len(test)))
-
-    select_columns = ['original', 'translation', 'z_mean']
-    if inject_features is not None:
-        select_columns.extend(inject_features)
-    train = train[select_columns]
-    test = test[select_columns]
-
-    print('Train contains {} segments'.format(len(train)))
-    print('Test contains {} segments'.format(len(test)))
-
-    train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
-    test = test.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'}).dropna()
-
-    train = fit(train, 'labels')
-    test = fit(test, 'labels')
-    print('Train contains {} segments'.format(len(train)))
-    print('Test contains {} segments'.format(len(test)))
-    return train, test
+from examples.common.util.data import read_data_files
+from examples.common.util.normalizer import un_fit
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--results_fname')
     parser.add_argument('--train_path')
     parser.add_argument('--test_path')
     parser.add_argument('--inject_features', nargs='+', default=None)
@@ -110,8 +85,8 @@ def main():
 
     test = un_fit(test, 'labels')
     test = un_fit(test, 'predictions')
-    test.to_csv(os.path.join(args.output_dir, '{}.tsv'.format(args.results_fname)), header=True, sep='\t', index=False, encoding='utf-8')
-    draw_scatterplot(test, 'labels', 'predictions', os.path.join(args.output_dir, '{}.png'.format(args.results_fname)),
+    test.to_csv(os.path.join(args.output_dir, 'results.tsv'), header=True, sep='\t', index=False, encoding='utf-8')
+    draw_scatterplot(test, 'labels', 'predictions', os.path.join(args.output_dir, 'results.png'),
                      MODEL_TYPE + ' ' + MODEL_NAME)
 
 
