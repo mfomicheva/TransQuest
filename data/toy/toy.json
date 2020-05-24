@@ -2,7 +2,7 @@
     "SEED": 777,
     "GOOGLE_DRIVE": false,
     "DRIVE_FILE_ID": null,
-    "MODEL_TYPE": "xlmroberta",
+    "MODEL_TYPE": "xlmrobertainject",
     "MODEL_NAME": "xlm-roberta-base",
     "fp16": false,
     "fp16_opt_level": "O1",
@@ -23,7 +23,7 @@
     "save_steps": 300,
     "no_cache": false,
     "save_model_every_epoch": true,
-    "n_fold": 5,
+    "n_fold": 1,
     "evaluate_during_training": true,
     "evaluate_during_training_steps": 300,
     "evaluate_during_training_verbose": true,
@@ -52,5 +52,6 @@
     "manual_seed": 777,
 
     "encoding": null,
-    "num_features": 1
+    "num_features": 1,
+    "reduce": false
 }

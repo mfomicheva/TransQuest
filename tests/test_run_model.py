@@ -27,19 +27,12 @@ class TestTrain(unittest.TestCase):
 
     def test_trains_model(self):
         config = load_config(self.args)
+        config['MODEL_TYPE'] = 'xlmroberta'
         train, test = read_data_files(self.train_path, self.test_path)
         train_model(train, config, test_size=0.5)
 
     def test_trains_model_with_injected_features(self):
         config = load_config(self.args)
+        config['MODEL_TYPE'] = 'xlmrobertainject'
         train, test = read_data_files(self.train_path, self.test_path, inject_features=['model_scores'])
-        train_model(train, config, test_size=0.5, inject_features=['model_scores'])
-
-# --output_dir
-# /home/marina/Workspace/experiments/TransQuest/models/toy
-# --train_path
-# /home/marina/Workspace/experiments/TransQuest/data/si-en/toy.tsv
-# --test_path
-# /home/marina/Workspace/experiments/TransQuest/data/si-en/toy.tsv
-# --inject_features
-# model_scores
+        train_model(train, config, test_size=0.5)

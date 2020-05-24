@@ -52,6 +52,8 @@ from algo.transformers.models.distilbert_model import DistilBertForSequenceClass
 from algo.transformers.models.roberta_model import RobertaForSequenceClassification
 from algo.transformers.models.xlm_model import XLMForSequenceClassification
 from algo.transformers.models.xlm_roberta_model import XLMRobertaForSequenceClassification
+from algo.transformers.models.xlm_roberta_model_inject import XLMRobertaForSequenceClassificationInject
+from algo.transformers.models.xlm_roberta_model_inject import XLMRobertaInjectConfig
 from algo.transformers.models.xlnet_model import XLNetForSequenceClassification
 from algo.transformers.utils import InputExample, convert_examples_to_features
 
@@ -93,6 +95,7 @@ class QuestModel:
             "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
             "camembert": (CamembertConfig, CamembertForSequenceClassification, CamembertTokenizer),
             "xlmroberta": (XLMRobertaConfig, XLMRobertaForSequenceClassification, XLMRobertaTokenizer),
+            "xlmrobertainject": (XLMRobertaInjectConfig, XLMRobertaForSequenceClassificationInject, XLMRobertaTokenizer),
             "flaubert": (FlaubertConfig, FlaubertForSequenceClassification, FlaubertTokenizer),
         }
 
@@ -105,10 +108,11 @@ class QuestModel:
 
         config_class, model_class, tokenizer_class = MODEL_CLASSES[model_type]
         if num_labels:
-            self.config = config_class.from_pretrained(model_name, num_labels=num_labels, **kwargs)
+            self.config = config_class.from_pretrained(
+                model_name, num_labels=num_labels, **args, **kwargs)
             self.num_labels = num_labels
         else:
-            self.config = config_class.from_pretrained(model_name, **kwargs)
+            self.config = config_class.from_pretrained(model_name, **args, **kwargs)
             self.num_labels = self.config.num_labels
         self.weight = weight
 
@@ -129,8 +133,7 @@ class QuestModel:
         if self.weight:
 
             self.model = model_class.from_pretrained(
-                model_name, config=self.config, weight=torch.Tensor(self.weight).to(self.device), **kwargs,
-            )
+                model_name, config=self.config, weight=torch.Tensor(self.weight).to(self.device), **kwargs)
         else:
             self.model = model_class.from_pretrained(model_name, config=self.config, **kwargs)
 
@@ -142,7 +145,6 @@ class QuestModel:
             "stride": 0.8,
             "regression": False,
         }
-
 
         if not use_cuda:
             self.args["fp16"] = False
@@ -166,6 +168,10 @@ class QuestModel:
             warnings.warn("wandb_project specified but wandb is not available. Wandb disabled.")
             self.args["wandb_project"] = None
 
+        self.use_features = False
+        if model_type == "xlmrobertainject":
+            self.use_features = True
+
     def train_model(
         self,
         train_df,
@@ -175,7 +181,6 @@ class QuestModel:
         args=None,
         eval_df=None,
         verbose=True,
-        model_scores=False,
         **kwargs
     ):
         """
@@ -220,10 +225,9 @@ class QuestModel:
 
         train_examples = load_examples(train_df)
 
-        train_dataset = self.load_and_cache_examples(train_examples, verbose=verbose, use_model_scores=model_scores)
+        train_dataset = self.load_and_cache_examples(train_examples, verbose=verbose, use_features=self.use_features)
 
         os.makedirs(output_dir, exist_ok=True)
-
         global_step, tr_loss = self.train(
             train_dataset,
             output_dir,
@@ -537,10 +541,10 @@ class QuestModel:
 
         if args["sliding_window"]:
             eval_dataset, window_counts = self.load_and_cache_examples(
-                eval_examples, evaluate=True, verbose=verbose, silent=silent
+                eval_examples, evaluate=True, verbose=verbose, silent=silent, use_features=self.use_features
             )
         else:
-            eval_dataset = self.load_and_cache_examples(eval_examples, evaluate=True, verbose=verbose, silent=silent)
+            eval_dataset = self.load_and_cache_examples(eval_examples, evaluate=True, verbose=verbose, silent=silent, use_features=self.use_features)
         os.makedirs(eval_output_dir, exist_ok=True)
 
         eval_sampler = SequentialSampler(eval_dataset)
@@ -621,7 +625,7 @@ class QuestModel:
         return results, model_outputs, wrong
 
     def load_and_cache_examples(
-        self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False, use_model_scores=False
+        self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False, use_features=False
     ):
         """
         Converts a list of InputExample objects to a TensorDataset containing InputFeatures. Caches the InputFeatures.
@@ -702,7 +706,7 @@ class QuestModel:
         all_input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
         all_input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
         all_segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
-        if use_model_scores:
+        if use_features:
             all_model_scores = torch.tensor([f.model_score for f in features], dtype=torch.float)
 
         if output_mode == "classification":
@@ -710,7 +714,7 @@ class QuestModel:
         elif output_mode == "regression":
             all_label_ids = torch.tensor([f.label_id for f in features], dtype=torch.float)
 
-        if use_model_scores:
+        if use_features:
             dataset = TensorDataset(all_input_ids, all_input_mask, all_segment_ids, all_label_ids, all_model_scores)
         else:
             dataset = TensorDataset(all_input_ids, all_input_mask, all_segment_ids, all_label_ids)
@@ -879,9 +883,9 @@ class QuestModel:
 
     def _get_inputs_dict(self, batch):
         try:
-            inputs = {"input_ids": batch[0], "attention_mask": batch[1], "labels": batch[3], "model_score": batch[4]}
+            inputs = {"input_ids": batch[0], "attention_mask": batch[1], "labels": batch[3], "features_inject": batch[4]}
         except IndexError:
-            inputs = {"input_ids": batch[0], "attention_mask": batch[1], "labels": batch[3], "model_score": None}
+            inputs = {"input_ids": batch[0], "attention_mask": batch[1], "labels": batch[3]}
 
         # XLM, DistilBERT and RoBERTa don't use segment_ids
         if self.args["model_type"] != "distilbert":

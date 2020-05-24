@@ -3,9 +3,6 @@ from transformers.modeling_roberta import RobertaConfig, RobertaModel, RobertaCl
     ROBERTA_PRETRAINED_MODEL_ARCHIVE_MAP, BertPreTrainedModel
 
 
-from algo.classifiers import RobertaClassificationHeadInjection
-
-
 class RobertaForSequenceClassification(BertPreTrainedModel):
     r"""
         **labels**: (`optional`) ``torch.LongTensor`` of shape ``(batch_size,)``:
@@ -42,18 +39,18 @@ class RobertaForSequenceClassification(BertPreTrainedModel):
         self.num_labels = config.num_labels
 
         self.roberta = RobertaModel(config)
-        self.classifier = RobertaClassificationHeadInjection(config)
+        self.classifier = RobertaClassificationHead(config)
         self.weight = weight
 
     def forward(self, input_ids=None, attention_mask=None, token_type_ids=None, position_ids=None, head_mask=None,
-                inputs_embeds=None, labels=None, model_score=None):
+                inputs_embeds=None, labels=None, features_inject=None):
         outputs = self.roberta(input_ids,
                                attention_mask=attention_mask,
                                token_type_ids=token_type_ids,
                                position_ids=position_ids,
                                head_mask=head_mask)
         sequence_output = outputs[0]
-        logits = self.classifier(sequence_output, model_score=model_score)
+        logits = self.classifier(sequence_output, features_inject=features_inject)
 
         outputs = (logits,) + outputs[2:]
         if labels is not None:

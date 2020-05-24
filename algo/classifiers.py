@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 
 from transformers.modeling_roberta import RobertaClassificationHead
+from algo.transformers.models.feature_injector import FeatureInjector
 
 
 class RobertaClassificationHeadInjection(RobertaClassificationHead):
@@ -11,29 +12,15 @@ class RobertaClassificationHeadInjection(RobertaClassificationHead):
         super(RobertaClassificationHeadInjection, self).__init__(config)
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
+        self.feature_injector = FeatureInjector(config)
 
-        self.inject_reduce = nn.Linear(config.hidden_size, 1)
-        self.inject_dense = nn.Linear(2, 2)
-        self.inject_out_proj = nn.Linear(2, config.num_labels)
-
-    def forward(self, features, model_score=None, **kwargs):
-        batch_dim, max_len, hidd_dim = features.shape
-        x = features[:, 0, :]  # take <s> token (equiv. to [CLS])
+    def forward(self, pretrained, reduce=False, features_inject=None, **kwargs):
+        batch_dim, max_len, hidd_dim = pretrained.shape
+        x = pretrained[:, 0, :]  # take <s> token (equiv. to [CLS])
         x = self.dropout(x)
         x = self.dense(x)
         x = torch.tanh(x)
         x = self.dropout(x)  # shape: (B, H)
         assert x.shape == (batch_dim, hidd_dim)
-        if model_score is not None:
-            model_score = model_score.unsqueeze(1)  # shape: (B, H)
-            assert model_score.shape == (batch_dim, 1)
-            x = self.inject_reduce(x)
-            assert x.shape == (batch_dim, 1)
-            x = torch.cat((x, model_score), 1)
-            assert x.shape == (batch_dim, 2)
-            x = self.inject_dense(x)
-            x = self.inject_out_proj(x)
-        else:
-            x = self.out_proj(x)
+        x = self.feature_injector(x, features_inject)
         return x
