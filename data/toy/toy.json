@@ -1,0 +1,56 @@
+{
+    "SEED": 777,
+    "GOOGLE_DRIVE": false,
+    "DRIVE_FILE_ID": null,
+    "MODEL_TYPE": "xlmroberta",
+    "MODEL_NAME": "xlm-roberta-base",
+    "fp16": false,
+    "fp16_opt_level": "O1",
+    "max_seq_length": 128,
+    "train_batch_size": 8,
+    "gradient_accumulation_steps": 1,
+    "eval_batch_size": 8,
+    "num_train_epochs": 3,
+    "weight_decay": 0,
+    "learning_rate": 2e-5,
+    "adam_epsilon": 1e-8,
+    "warmup_ratio": 0.06,
+    "warmup_steps": 0,
+    "max_grad_norm": 1.0,
+    "do_lower_case": false,
+
+    "logging_steps": 300,
+    "save_steps": 300,
+    "no_cache": false,
+    "save_model_every_epoch": true,
+    "n_fold": 5,
+    "evaluate_during_training": true,
+    "evaluate_during_training_steps": 300,
+    "evaluate_during_training_verbose": true,
+    "use_cached_eval_features": false,
+    "save_eval_checkpoints": true,
+    "tensorboard_dir": null,
+
+    "regression": true,
+
+    "overwrite_output_dir": true,
+    "reprocess_input_data": true,
+
+    "n_gpu": 1,
+    "use_multiprocessing": true,
+    "silent": false,
+
+    "wandb_project": null,
+    "wandb_kwargs": {},
+
+    "use_early_stopping": true,
+    "early_stopping_patience": 10,
+    "early_stopping_delta": 0,
+    "early_stopping_metric": "eval_loss",
+    "early_stopping_metric_minimize": true,
+
+    "manual_seed": 777,
+
+    "encoding": null,
+    "num_features": 1
+}
