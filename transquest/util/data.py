@@ -40,33 +40,24 @@ def load_examples(df):
     return examples
 
 
-def read_data_files(train_file, test_file, features_pref=None):
-    train = pd.read_csv(train_file, sep='\t', quoting=3)
-    test = pd.read_csv(test_file, sep='\t', quoting=3)
-
+def read_data_file(fpath, split=None, features_pref=None):
     select_columns = ['original', 'translation', 'z_mean']
-
-    train = train[select_columns]
-    test = test[select_columns]
-
-    train = train.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'})
-    test = test.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'})
-
-    train = fit(train, 'labels')
-    test = fit(test, 'labels')
+    data = pd.read_csv(fpath, sep='\t', quoting=3)
+    data = data[select_columns]
+    data = data.rename(columns={'original': 'text_a', 'translation': 'text_b', 'z_mean': 'labels'})
+    data = fit(data, 'labels')
 
     if features_pref is not None:
-        features_train = pd.read_csv(features_pref + '.train.tsv', sep='\t')
-        features_test = pd.read_csv(features_pref + '.test.tsv', sep='\t')
-        assert len(features_train) == len(train)
-        assert len(features_test) == len(test)
-        try:
-            assert list(features_train.columns) == list(features_test.columns)
-        except AssertionError:
-            print(list(features_train.columns))
-            print(list(features_test.columns))
-        for column in features_train.columns:
-            train[column] = features_train[column]
-            test[column] = features_test[column]
+        features = pd.read_csv(features_pref + '.{}.tsv'.format(split), sep='\t')
+        assert len(features) == len(data)
+        for column in features.columns:
+            data[column] = features[column]
 
+    return data
+
+
+def read_data_files(train_file, test_file, features_pref=None):
+    train = read_data_file(train_file, split='train', features_pref=features_pref)
+    test = read_data_file(test_file, split='test', features_pref=features_pref)
+    assert list(train.columns) == list(test.columns)
     return train, test
