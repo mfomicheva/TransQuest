@@ -30,5 +30,13 @@ class TestTrain(unittest.TestCase):
     def test_trains_model_with_injected_features(self):
         config = load_config(self.args)
         config['MODEL_TYPE'] = 'xlmrobertainject'
+        config['reduce'] = False
+        train, test = read_data_files(self.train_path, self.test_path, features_pref=self.features_pref)
+        train_model(train, config, test_size=0.5)
+
+    def test_trains_model_with_injected_features_with_reduce(self):
+        config = load_config(self.args)
+        config['MODEL_TYPE'] = 'xlmrobertainject'
+        config['reduce'] = True
         train, test = read_data_files(self.train_path, self.test_path, features_pref=self.features_pref)
         train_model(train, config, test_size=0.5)
