@@ -4,15 +4,12 @@ import argparse
 import pandas as pd
 import torch
 
-from algo.transformers.run_model import QuestModel
-from algo.transformers.evaluation import pearson_corr, spearman_corr
+from transquest.algo.transformers.run_model import QuestModel
+from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
 from sklearn.metrics import mean_absolute_error
 
-from examples.common.util.normalizer import fit, un_fit
-from examples.common.config.predict_config import predict_config
-from examples.common.config.predict_config import MODEL_TYPE
-from examples.common.config.predict_config import MODEL_NAME
-from examples.common.util.draw import draw_scatterplot
+from transquest.util.normalizer import fit, un_fit
+from transquest.util.draw import draw_scatterplot
 
 
 def read_test_file(test_file):

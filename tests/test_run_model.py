@@ -1,9 +1,9 @@
 import os
 import unittest
 
-from examples.common.train import train_model
-from examples.common.train import load_config
-from examples.common.util.data import read_data_files
+from transquest.bin.train import train_model  # TODO: this method should be in a different place
+from transquest.util.data import load_config
+from transquest.util.data import read_data_files
 
 from tests.utils import Args
 

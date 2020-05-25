@@ -1,22 +1,20 @@
 import argparse
 import os
 import shutil
-import json
 
 import numpy as np
 import torch
 
-from multiprocessing import cpu_count
-
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from algo.transformers.evaluation import pearson_corr, spearman_corr
-from algo.transformers.run_model import QuestModel
-from examples.common.util.draw import draw_scatterplot
+from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
+from transquest.algo.transformers.run_model import QuestModel
+from transquest.util.draw import draw_scatterplot
 
-from examples.common.util.data import read_data_files
-from examples.common.util.normalizer import un_fit
+from transquest.util.data import read_data_files
+from transquest.util.data import load_config
+from transquest.util.normalizer import un_fit
 
 
 def train_model(train_set, config, n_fold=None, test_size=None, return_model=False):
@@ -44,18 +42,6 @@ def evaluate_model(test_set, config, model=None):
         test_set, pearson_corr=pearson_corr, spearman_corr=spearman_corr, mae=mean_absolute_error
     )
     return model_outputs
-
-
-def load_config(args):
-    config = json.load(open(args.config))
-    process_count = cpu_count() - 2 if cpu_count() > 2 else 1
-    config.update({
-        'output_dir': os.path.join(args.output_dir, 'outputs'),
-        'best_model_dir': os.path.join(args.output_dir, 'best_model'),
-        'cache_dir': os.path.join(args.output_dir, 'cache_dir'),
-        'process_count': process_count,
-    })
-    return config
 
 
 def main():

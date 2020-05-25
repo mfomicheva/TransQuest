@@ -1,8 +1,8 @@
 from transformers.configuration_xlm_roberta import XLMRobertaConfig
 from transformers.modeling_xlm_roberta import XLM_ROBERTA_PRETRAINED_MODEL_ARCHIVE_MAP
 
-from algo.transformers.models.xlm_roberta_model import XLMRobertaForSequenceClassification
-from algo.classifiers import RobertaClassificationHeadInjection
+from transquest.algo.transformers.models.xlm_roberta_model import XLMRobertaForSequenceClassification
+from transquest.algo.classifiers import RobertaClassificationHeadInjection
 
 
 class XLMRobertaInjectConfig(XLMRobertaConfig):

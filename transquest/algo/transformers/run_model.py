@@ -45,19 +45,19 @@ from transformers import (
     FlaubertTokenizer,
 )
 
-from algo.transformers.models.albert_model import AlbertForSequenceClassification
-from algo.transformers.models.bert_model import BertForSequenceClassification
-from algo.transformers.models.camembert_model import CamembertForSequenceClassification
-from algo.transformers.models.distilbert_model import DistilBertForSequenceClassification
-from algo.transformers.models.roberta_model import RobertaForSequenceClassification
-from algo.transformers.models.xlm_model import XLMForSequenceClassification
-from algo.transformers.models.xlm_roberta_model import XLMRobertaForSequenceClassification
-from algo.transformers.models.xlm_roberta_model_inject import XLMRobertaForSequenceClassificationInject
-from algo.transformers.models.xlm_roberta_model_inject import XLMRobertaInjectConfig
-from algo.transformers.models.xlnet_model import XLNetForSequenceClassification
-from algo.transformers.utils import InputExample, convert_examples_to_features
+from transquest.algo.transformers.models.albert_model import AlbertForSequenceClassification
+from transquest.algo.transformers.models.bert_model import BertForSequenceClassification
+from transquest.algo.transformers.models.camembert_model import CamembertForSequenceClassification
+from transquest.algo.transformers.models.distilbert_model import DistilBertForSequenceClassification
+from transquest.algo.transformers.models.roberta_model import RobertaForSequenceClassification
+from transquest.algo.transformers.models.xlm_model import XLMForSequenceClassification
+from transquest.algo.transformers.models.xlm_roberta_model import XLMRobertaForSequenceClassification
+from transquest.algo.transformers.models.xlm_roberta_model_inject import XLMRobertaForSequenceClassificationInject
+from transquest.algo.transformers.models.xlm_roberta_model_inject import XLMRobertaInjectConfig
+from transquest.algo.transformers.models.xlnet_model import XLNetForSequenceClassification
+from transquest.algo.transformers.utils import InputExample, convert_examples_to_features
 
-from examples.common.util.data import load_examples
+from transquest.util.data import load_examples
 
 
 try:

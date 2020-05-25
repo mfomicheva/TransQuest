@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 from transformers.modeling_roberta import RobertaClassificationHead
-from algo.transformers.models.feature_injector import FeatureInjector
+from transquest.algo.transformers.models.feature_injector import FeatureInjector
 
 
 class RobertaClassificationHeadInjection(RobertaClassificationHead):

@@ -1,25 +1,26 @@
-import logging
 import os
 import shutil
-import numpy as np
 
+import numpy as np
 import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
-from algo.transformers.evaluation import pearson_corr, spearman_corr
-from algo.transformers.run_model import QuestModel
-from examples.common.util.draw import draw_scatterplot
-from examples.common.util.normalizer import fit, un_fit
-from examples.ne_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
+from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
+from transquest.algo.transformers.run_model import QuestModel
+from transquest.util.draw import draw_scatterplot
+
+from transquest.util.normalizer import fit, un_fit
+from transquest.examples.si_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE, RESULT_IMAGE
+
 
 if not os.path.exists(TEMP_DIRECTORY):
     os.makedirs(TEMP_DIRECTORY)
 
-TRAIN_FILE = "data/ne-en/train.neen.df.short.tsv"
-TEST_FILE = "data/ne-en/dev.neen.df.short.tsv"
+TRAIN_FILE = "data/si-en/train.sien.df.short.tsv"
+TEST_FILE = "data/si-en/dev.sien.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t', error_bad_lines=False)
 test = pd.read_csv(TEST_FILE, sep='\t', error_bad_lines=False)

@@ -2,10 +2,10 @@ import os
 
 import unittest
 
-from examples.common.train import read_data_files
-from examples.common.util.data import load_examples
-from algo.transformers.run_model import QuestModel
-from examples.common.train import load_config
+from transquest.util.data import read_data_files
+from transquest.util.data import load_examples
+from transquest.algo.transformers.run_model import QuestModel
+from transquest.util.data import load_config
 
 from tests.utils import Args
 

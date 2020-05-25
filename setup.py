@@ -36,8 +36,8 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            'tq-predict=examples.common.predict:main',
-            'tq-train=examples.common.train:main',
+            'tq-predict=transquest.bin.predict:main',
+            'tq-train=transquest.bin.train:main',
         ]
     }
 )

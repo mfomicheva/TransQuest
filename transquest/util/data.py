@@ -1,7 +1,22 @@
+import os
+import json
 import pandas as pd
+from multiprocessing import cpu_count
 
-from examples.common.util.normalizer import fit, un_fit
-from algo.transformers.utils import InputExample
+from transquest.util.normalizer import fit
+from transquest.algo.transformers.utils import InputExample
+
+
+def load_config(args):
+    config = json.load(open(args.config))
+    process_count = cpu_count() - 2 if cpu_count() > 2 else 1
+    config.update({
+        'output_dir': os.path.join(args.output_dir, 'outputs'),
+        'best_model_dir': os.path.join(args.output_dir, 'best_model'),
+        'cache_dir': os.path.join(args.output_dir, 'cache_dir'),
+        'process_count': process_count,
+    })
+    return config
 
 
 def load_examples(df):

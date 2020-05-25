@@ -1,19 +1,19 @@
-import logging
 import os
 import shutil
+import numpy as np
 
 import pandas as pd
 import torch
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
-import numpy as np
 
-from algo.transformers.evaluation import pearson_corr, spearman_corr
-from algo.transformers.run_model import QuestModel
-from examples.common.util.download import download_from_google_drive
-from examples.common.util.draw import draw_scatterplot
-from examples.common.util.normalizer import fit, un_fit
-from examples.ro_en.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
+from transquest.algo.transformers.evaluation import pearson_corr, spearman_corr
+from transquest.algo.transformers.run_model import QuestModel
+from transquest.util.download import download_from_google_drive
+from transquest.util.draw import draw_scatterplot
+
+from transquest.util.normalizer import fit, un_fit
+from transquest.examples.en_de.transformer_config import TEMP_DIRECTORY, MODEL_TYPE, MODEL_NAME, transformer_config, SEED, \
     RESULT_FILE, RESULT_IMAGE, GOOGLE_DRIVE, DRIVE_FILE_ID
 
 if not os.path.exists(TEMP_DIRECTORY):
@@ -22,8 +22,8 @@ if not os.path.exists(TEMP_DIRECTORY):
 if GOOGLE_DRIVE:
     download_from_google_drive(DRIVE_FILE_ID, MODEL_NAME)
 
-TRAIN_FILE = "data/ro-en/train.roen.df.short.tsv"
-TEST_FILE = "data/ro-en/dev.roen.df.short.tsv"
+TRAIN_FILE = "data/en-de/train.ende.df.short.tsv"
+TEST_FILE = "data/en-de/dev.ende.df.short.tsv"
 
 train = pd.read_csv(TRAIN_FILE, sep='\t')
 test = pd.read_csv(TEST_FILE, sep='\t')
