@@ -9,6 +9,7 @@ class FeatureInjector(nn.Module):
         super().__init__()
         self.num_features = config.num_features
         self.reduce = config.reduce
+        print('Reduce is {} for feature injector'.format(self.reduce))
 
         self.reducer = nn.Linear(config.hidden_size, config.num_features)
         self.dense = nn.Linear(config.hidden_size + config.num_features, config.hidden_size + config.num_features)

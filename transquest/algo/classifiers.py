@@ -14,7 +14,7 @@ class RobertaClassificationHeadInjection(RobertaClassificationHead):
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.feature_injector = FeatureInjector(config)
 
-    def forward(self, pretrained, reduce=False, features_inject=None, **kwargs):
+    def forward(self, pretrained, features_inject=None, **kwargs):
         batch_dim, max_len, hidd_dim = pretrained.shape
         x = pretrained[:, 0, :]  # take <s> token (equiv. to [CLS])
         x = self.dropout(x)
