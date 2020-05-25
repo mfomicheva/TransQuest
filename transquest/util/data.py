@@ -60,7 +60,11 @@ def read_data_files(train_file, test_file, features_pref=None):
         features_test = pd.read_csv(features_pref + '.test.tsv', sep='\t')
         assert len(features_train) == len(train)
         assert len(features_test) == len(test)
-        assert list(features_train.columns) == list(features_test.columns)
+        try:
+            assert list(features_train.columns) == list(features_test.columns)
+        except AssertionError:
+            print(list(features_train.columns))
+            print(list(features_test.columns))
         for column in features_train.columns:
             train[column] = features_train[column]
             test[column] = features_test[column]
