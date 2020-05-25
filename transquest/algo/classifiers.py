@@ -15,7 +15,6 @@ class RobertaClassificationHeadInjection(RobertaClassificationHead):
         self.feature_injector = FeatureInjector(config)
 
     def forward(self, pretrained, features_inject=None, **kwargs):
-        print('I am using feature injection!')
         batch_dim, max_len, hidd_dim = pretrained.shape
         x = pretrained[:, 0, :]  # take <s> token (equiv. to [CLS])
         x = self.dropout(x)
