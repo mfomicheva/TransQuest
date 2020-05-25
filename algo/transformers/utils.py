@@ -20,6 +20,8 @@ import csv
 import logging
 from multiprocessing import Pool, cpu_count
 
+from collections import OrderedDict
+
 from tqdm.auto import tqdm
 
 csv.field_size_limit(2147483647)
@@ -28,7 +30,7 @@ csv.field_size_limit(2147483647)
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
 
-    def __init__(self, guid, text_a, text_b=None, label=None, model_score=None,):
+    def __init__(self, guid, text_a, text_b=None, label=None):
         """
         Constructs a InputExample.
 
@@ -45,19 +47,19 @@ class InputExample(object):
         self.guid = guid
         self.text_a = text_a
         self.text_b = text_b
-        self.model_score = model_score
+        self.features_inject = OrderedDict()  # TODO: add method for setting features
         self.label = label
 
 
 class InputFeatures(object):
     """A single set of features of data."""
 
-    def __init__(self, input_ids, input_mask, segment_ids, label_id, model_score=None):
+    def __init__(self, input_ids, input_mask, segment_ids, label_id, features_inject=None):
         self.input_ids = input_ids
         self.input_mask = input_mask
         self.segment_ids = segment_ids
         self.label_id = label_id
-        self.model_score = model_score
+        self.features_inject = features_inject
 
 
 def convert_example_to_feature(
@@ -153,7 +155,7 @@ def convert_example_to_feature(
         input_mask=input_mask,
         segment_ids=segment_ids,
         label_id=example.label,
-        model_score=example.model_score,
+        features_inject=example.features_inject,
     )
 
 
@@ -251,7 +253,7 @@ def convert_example_to_feature_sliding_window(
                 input_mask=input_mask,
                 segment_ids=segment_ids,
                 label_id=example.label,
-                model_score=example.model_score,
+                features_inject=example.features_inject,
             )
         )
 

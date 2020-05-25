@@ -112,7 +112,7 @@ class QuestModel:
                 model_name, num_labels=num_labels, **args, **kwargs)
             self.num_labels = num_labels
         else:
-            self.config = config_class.from_pretrained(model_name, **args, **kwargs)
+            self.config = config_class.from_pretrained(model_name, **args, **kwargs)  # TODO: this fails if args is None
             self.num_labels = self.config.num_labels
         self.weight = weight
 
@@ -225,7 +225,7 @@ class QuestModel:
 
         train_examples = load_examples(train_df)
 
-        train_dataset = self.load_and_cache_examples(train_examples, verbose=verbose, use_features=self.use_features)
+        train_dataset = self.make_dataset(train_examples, verbose=verbose, use_features=self.use_features)
 
         os.makedirs(output_dir, exist_ok=True)
         global_step, tr_loss = self.train(
@@ -540,11 +540,11 @@ class QuestModel:
         print('Loaded {} examples for evaluation'.format(len(eval_examples)))
 
         if args["sliding_window"]:
-            eval_dataset, window_counts = self.load_and_cache_examples(
+            eval_dataset, window_counts = self.make_dataset(
                 eval_examples, evaluate=True, verbose=verbose, silent=silent, use_features=self.use_features
             )
         else:
-            eval_dataset = self.load_and_cache_examples(eval_examples, evaluate=True, verbose=verbose, silent=silent, use_features=self.use_features)
+            eval_dataset = self.make_dataset(eval_examples, evaluate=True, verbose=verbose, silent=silent, use_features=self.use_features)
         os.makedirs(eval_output_dir, exist_ok=True)
 
         eval_sampler = SequentialSampler(eval_dataset)
@@ -624,7 +624,7 @@ class QuestModel:
 
         return results, model_outputs, wrong
 
-    def load_and_cache_examples(
+    def make_dataset(  # TODO: Move data-related methods to data module
         self, examples, evaluate=False, no_cache=False, multi_label=False, verbose=True, silent=False, use_features=False
     ):
         """
@@ -706,16 +706,22 @@ class QuestModel:
         all_input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
         all_input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
         all_segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
-        if use_features:
-            all_model_scores = torch.tensor([f.model_score for f in features], dtype=torch.float)
+        all_features = None
+        if features[0].features_inject:
+            num_features = len(features[0].features_inject)
+            features_arr = np.zeros((len(features), num_features))
+            for i, f in enumerate(features):
+                for j, feature_name in enumerate(f.features_inject.keys()):
+                    features_arr[i][j] = f.features_inject[feature_name]
+            all_features = torch.tensor(features_arr, dtype=torch.float)
 
         if output_mode == "classification":
             all_label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
         elif output_mode == "regression":
             all_label_ids = torch.tensor([f.label_id for f in features], dtype=torch.float)
 
-        if use_features:
-            dataset = TensorDataset(all_input_ids, all_input_mask, all_segment_ids, all_label_ids, all_model_scores)
+        if all_features is not None:
+            dataset = TensorDataset(all_input_ids, all_input_mask, all_segment_ids, all_label_ids, all_features)
         else:
             dataset = TensorDataset(all_input_ids, all_input_mask, all_segment_ids, all_label_ids)
 
@@ -795,9 +801,9 @@ class QuestModel:
             else:
                 eval_examples = [InputExample(i, text, None, 0) for i, text in enumerate(to_predict)]
         if args["sliding_window"]:
-            eval_dataset, window_counts = self.load_and_cache_examples(eval_examples, evaluate=True, no_cache=True)
+            eval_dataset, window_counts = self.make_dataset(eval_examples, evaluate=True, no_cache=True)
         else:
-            eval_dataset = self.load_and_cache_examples(
+            eval_dataset = self.make_dataset(
                 eval_examples, evaluate=True, multi_label=multi_label, no_cache=True
             )
 

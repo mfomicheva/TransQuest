@@ -52,6 +52,6 @@
     "manual_seed": 777,
 
     "encoding": null,
-    "num_features": 1,
+    "num_features": 2,
     "reduce": false
 }

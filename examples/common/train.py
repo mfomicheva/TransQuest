@@ -60,15 +60,15 @@ def load_config(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--train_path')
-    parser.add_argument('--test_path')
-    parser.add_argument('--output_dir')
-    parser.add_argument('--config')
-    parser.add_argument('--inject_features', nargs='+', default=None)
+    parser.add_argument('--train_path', required=True)
+    parser.add_argument('--test_path', required=True)
+    parser.add_argument('--output_dir', required=True)
+    parser.add_argument('--config', required=True)
+    parser.add_argument('--features_pref', default=None, required=False)
     parser.add_argument('--test_size', default=0.1, type=float)
     args = parser.parse_args()
     config = load_config(args)
-    train, test = read_data_files(args.train_path, args.test_path, inject_features=args.inject_features)
+    train, test = read_data_files(args.train_path, args.test_path, features_pref=args.features_pref)
     if config['evaluate_during_training']:
         if config['n_fold'] > 1:
             test_preds = np.zeros((len(test), config['n_fold']))

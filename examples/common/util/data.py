@@ -16,20 +16,21 @@ def load_examples(df):
         raise ValueError(
             "Passed DataFrame is not in the correct format. Please rename your columns to text_a, text_b and labels"
         )
-    if "model_scores" in df.columns:
-        model_scores = df["model_scores"].to_list()
-        for i, ex in enumerate(examples):
-            ex.model_score = model_scores[i]
+    if "feature1" in df.columns:
+        for col in df.columns:
+            if col.startswith("feature"):
+                values = df[col].to_list()
+                for i, ex in enumerate(examples):
+                    ex.features_inject[col] = values[i]
     return examples
 
 
-def read_data_files(train_file, test_file, inject_features=None):
+def read_data_files(train_file, test_file, features_pref=None):
     train = pd.read_csv(train_file, sep='\t', quoting=3)
     test = pd.read_csv(test_file, sep='\t', quoting=3)
 
     select_columns = ['original', 'translation', 'z_mean']
-    if inject_features is not None:
-        select_columns.extend(inject_features)
+
     train = train[select_columns]
     test = test[select_columns]
 
@@ -38,4 +39,15 @@ def read_data_files(train_file, test_file, inject_features=None):
 
     train = fit(train, 'labels')
     test = fit(test, 'labels')
+
+    if features_pref is not None:
+        features_train = pd.read_csv(features_pref + '.train.tsv', sep='\t')
+        features_test = pd.read_csv(features_pref + '.test.tsv', sep='\t')
+        assert len(features_train) == len(train)
+        assert len(features_test) == len(test)
+        assert list(features_train.columns) == list(features_test.columns)
+        for column in features_train.columns:
+            train[column] = features_train[column]
+            test[column] = features_test[column]
+
     return train, test
