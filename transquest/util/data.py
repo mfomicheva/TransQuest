@@ -31,7 +31,7 @@ def load_examples(df):
         raise ValueError(
             "Passed DataFrame is not in the correct format. Please rename your columns to text_a, text_b and labels"
         )
-    if "feature1" in df.columns:
+    if "feature1" in df.columns:  # TODO: this must not be hard-coded. The name of the feature must be indifferent
         for col in df.columns:
             if col.startswith("feature"):
                 values = df[col].to_list()
