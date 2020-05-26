@@ -7,6 +7,9 @@ from transquest.util.normalizer import fit
 from transquest.algo.transformers.utils import InputExample
 
 
+DEFAULT_FEATURE_NAME = 'feature'
+
+
 def load_config(args):
     config = json.load(open(args.config))
     process_count = cpu_count() - 2 if cpu_count() > 2 else 1
@@ -31,9 +34,9 @@ def load_examples(df):
         raise ValueError(
             "Passed DataFrame is not in the correct format. Please rename your columns to text_a, text_b and labels"
         )
-    if "feature1" in df.columns:  # TODO: this must not be hard-coded. The name of the feature must be indifferent
+    if "{}1".format(DEFAULT_FEATURE_NAME) in df.columns:
         for col in df.columns:
-            if col.startswith("feature"):
+            if col.startswith(DEFAULT_FEATURE_NAME):
                 values = df[col].to_list()
                 for i, ex in enumerate(examples):
                     ex.features_inject[col] = values[i]
@@ -48,7 +51,9 @@ def read_data_file(fpath, split=None, features_pref=None):
     data = fit(data, 'labels')
 
     if features_pref is not None:
-        features = pd.read_csv(features_pref + '.{}.tsv'.format(split), sep='\t')
+        features = pd.read_csv(features_pref + '.{}.tsv'.format(split), sep='\t', header=None)
+        num_features = len(features.columns)
+        features.columns = ['{}{}'.format(DEFAULT_FEATURE_NAME, i) for i in range(1, num_features + 1)]
         assert len(features) == len(data)
         for column in features.columns:
             data[column] = features[column]
