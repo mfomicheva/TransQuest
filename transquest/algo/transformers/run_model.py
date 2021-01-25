@@ -1053,7 +1053,7 @@ class QuestModel:
             ensemble_predictions.append(preds)
 
         ensemble_predictions = np.asarray(ensemble_predictions)
-        print(ensemble_predictions[0])
+        print(ensemble_predictions[:,0])
         output = np.mean(ensemble_predictions, axis=0)
         variances = np.var(ensemble_predictions, axis=0)
         return output, variances
