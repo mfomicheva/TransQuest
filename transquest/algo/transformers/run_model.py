@@ -1023,6 +1023,40 @@ class QuestModel:
         else:
             return {**{"mcc": mcc}, **extra_metrics}, wrong
 
+    def predict_regression_with_dropout(self, to_predict, N=30):
+
+        model = self.model
+        args = self.args
+
+        self._move_model_to_device()
+        eval_examples = [InputExample(i, text[0], text[1], 0) for i, text in enumerate(to_predict)]
+
+        eval_dataset = self.load_and_cache_examples(eval_examples, evaluate=True, no_cache=True)
+        eval_sampler = SequentialSampler(eval_dataset)
+        eval_dataloader = DataLoader(eval_dataset, sampler=eval_sampler, batch_size=args.eval_batch_size)
+
+        ensemble_predictions = []
+
+        for _ in range(N):
+            preds = None
+            for batch in tqdm(eval_dataloader, disable=args.silent):
+                with torch.no_grad():
+                    inputs = self._get_inputs_dict(batch)
+                    outputs = model(**inputs)
+                    _, logits = outputs[:2]
+
+                if preds is None:
+                    preds = logits.detach().cpu().numpy()
+                else:
+                    preds = np.append(preds, logits.detach().cpu().numpy(), axis=0)
+            preds = np.squeeze(preds)
+            ensemble_predictions.append(preds)
+
+        ensemble_predictions = np.asarray(ensemble_predictions)
+        print(ensemble_predictions[0])
+        ensemble_predictions = np.mean(ensemble_predictions, axis=1)
+        return ensemble_predictions
+
     def predict(self, to_predict, multi_label=False):
         """
         Performs predictions on a list of text.
