@@ -1,19 +1,19 @@
 from multiprocessing import cpu_count
 
 SEED = 777
-TEMP_DIRECTORY = "temp/data"
+TEMP_DIRECTORY = "/data/mfomicheva/qe-distillation/models/transquest-xlmr-ensemble-eten/model3/data"
 RESULT_FILE = "result.tsv"
 RESULT_IMAGE = "result.jpg"
 SUBMISSION_FILE = "predictions.txt"
 GOOGLE_DRIVE = False
 DRIVE_FILE_ID = "1F-hknKCY0spD8H1gfhE9EcxusEze2si2"
 MODEL_TYPE = "xlmroberta"
-MODEL_NAME = "transquest/ro-en"
+MODEL_NAME = "xlm-roberta-large"
 
 transformer_config = {
-    'output_dir': 'temp/outputs/',
-    "best_model_dir": "temp/outputs/best_model",
-    'cache_dir': 'temp/cache_dir/',
+    'output_dir': '/data/mfomicheva/qe-distillation/models/transquest-xlmr-ensemble-eten/model3/outputs/',
+    "best_model_dir": "/data/mfomicheva/qe-distillation/models/transquest-xlmr-ensemble-eten/model3/outputs/best_model",
+    'cache_dir': '/data/mfomicheva/qe-distillation/models/transquest-xlmr-ensemble-eten/model3/cache_dir/',
 
     'fp16': False,
     'fp16_opt_level': 'O1',
@@ -37,7 +37,7 @@ transformer_config = {
     "save_recent_only": True,
     'save_model_every_epoch': False,
     'n_fold': 3,
-    'evaluate_during_training': True,
+    'evaluate_during_training': False,
     "evaluate_during_training_silent": False,
     'evaluate_during_training_steps': 300,
     "evaluate_during_training_verbose": True,
@@ -67,8 +67,6 @@ transformer_config = {
     "early_stopping_metric": "eval_loss",
     "early_stopping_metric_minimize": True,
     "early_stopping_consider_epochs": False,
-
-    "manual_seed": SEED,
 
     "config": {},
     "local_rank": -1,
