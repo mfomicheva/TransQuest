@@ -12,7 +12,7 @@ DEV_SOURCE_TAGS_FILE = "dev.source_tags"
 DEV_TARGET_FILE = "dev.mt"
 DEV_TARGET_TAGS_FLE = "dev.tags"
 
-TEST_PATH = "examples/word_level/wmt_2020/et_en/data/et-en/dev/"
+TEST_PATH = "examples/word_level/wmt_2021/et_en/data/et-en/dev/"
 TEST_SOURCE_FILE = "dev.src"
 TEST_TARGET_FILE = "dev.mt"
 
