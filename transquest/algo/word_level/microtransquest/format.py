@@ -19,7 +19,8 @@ def prepare_data(raw_df, args):
         target_words = target_sentence.split()
         target_tags = target_tag_lind.split()
 
-        data.append([sentence_id, args.tag, target_tags.pop(0)])
+        if not args.no_gaps:
+            data.append([sentence_id, args.tag, target_tags.pop(0)])
 
         for word in target_words:
             data.append([sentence_id, word, target_tags.pop(0)])
