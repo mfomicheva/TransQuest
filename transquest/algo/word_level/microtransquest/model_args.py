@@ -20,4 +20,3 @@ class MicroTransQuestArgs(TransQuestArgs):
     tag: str = "<gap>"
     default_quality: str = "OK"
     no_gaps: bool = False
-    no_tags: bool = False

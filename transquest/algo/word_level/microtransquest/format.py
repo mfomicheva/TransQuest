@@ -23,7 +23,7 @@ def prepare_data(raw_df, args):
 
         for word in target_words:
             data.append([sentence_id, word, target_tags.pop(0)])
-            if not args.no_tags:
+            if not args.no_gaps:
                 data.append([sentence_id, args.tag, target_tags.pop(0)])
 
         sentence_id += 1
