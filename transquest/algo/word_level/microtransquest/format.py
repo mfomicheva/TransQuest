@@ -14,7 +14,7 @@ def prepare_data(raw_df, args):
         for word, tag in zip(source_sentence.split(), source_tag_line.split()):
             data.append([sentence_id, word, tag])
 
-        data.append([sentence_id, "[SEP]", "OK"])
+        data.append([sentence_id, "[SEP]", args.default_quality])
 
         target_words = target_sentence.split()
         target_tags = target_tag_lind.split()
