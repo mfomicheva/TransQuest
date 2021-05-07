@@ -937,7 +937,7 @@ class MicroTransQuestModel:
 
         return results, model_outputs, preds_list
 
-    def predict(self, to_predict, split_on_space=True):
+    def predict(self, to_predict, split_on_space=True, return_logits=False):
         """
         Performs predictions on a list of text.
 
@@ -1099,17 +1099,19 @@ class MicroTransQuestModel:
             )
             word_tokens.append(w_log)
 
+        get_logits = lambda tok: tok[0][1] if return_logits else tok
         if split_on_space:
             model_outputs = [
-                [{word: word_tokens[i][j]} for j, word in enumerate(sentence.split()[: len(preds_list[i])])]
+                [{word: get_logits(word_tokens[i][j])} for j, word in enumerate(sentence.split()[: len(preds_list[i])])]
                 for i, sentence in enumerate(to_predict)
             ]
         else:
             model_outputs = [
-                [{word: word_tokens[i][j]} for j, word in enumerate(sentence[: len(preds_list[i])])]
+                [{word: get_logits(word_tokens[i][j])} for j, word in enumerate(sentence[: len(preds_list[i])])]
                 for i, sentence in enumerate(to_predict)
             ]
-
+        if return_logits:
+            preds = model_outputs
         sources_tags, targets_tags = post_process(preds, to_predict, args=self.args)
 
         return sources_tags, targets_tags
