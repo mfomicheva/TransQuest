@@ -937,7 +937,7 @@ class MicroTransQuestModel:
 
         return results, model_outputs, preds_list
 
-    def predict(self, to_predict, split_on_space=True, return_logits=False):
+    def predict(self, to_predict, split_on_space=True, return_probas=False):
         """
         Performs predictions on a list of text.
 
@@ -1068,7 +1068,7 @@ class MicroTransQuestModel:
 
             eval_loss = eval_loss / nb_eval_steps
         token_logits = preds
-        token_logits = torch.sigmoid(token_logits)
+        token_logits = self._sigmoid(token_logits)
         preds = np.argmax(preds, axis=2)
 
         label_map = {i: label for i, label in enumerate(self.args.labels_list)}
@@ -1352,3 +1352,7 @@ class MicroTransQuestModel:
 
     def get_named_parameters(self):
         return [n for n, p in self.model.named_parameters()]
+
+    @staticmethod
+    def _sigmoid(x):
+        return 1 / (1 + math.exp(-x))
