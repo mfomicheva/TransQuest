@@ -1068,7 +1068,7 @@ class MicroTransQuestModel:
 
             eval_loss = eval_loss / nb_eval_steps
         token_logits = preds
-        token_logits = self._sigmoid(token_logits)
+        token_logits = torch.sigmoid(torch.as_tensor(token_logits))
         preds = np.argmax(preds, axis=2)
 
         label_map = {i: label for i, label in enumerate(self.args.labels_list)}
@@ -1100,7 +1100,7 @@ class MicroTransQuestModel:
             )
             word_tokens.append(w_log)
 
-        get_logits = lambda tok: tok[0][1] if return_logits else tok
+        get_logits = lambda tok: tok[0][1] if return_probas else tok
         if split_on_space:
             model_outputs = [
                 [{word: get_logits(word_tokens[i][j])} for j, word in enumerate(sentence.split()[: len(preds_list[i])])]
@@ -1111,7 +1111,7 @@ class MicroTransQuestModel:
                 [{word: get_logits(word_tokens[i][j])} for j, word in enumerate(sentence[: len(preds_list[i])])]
                 for i, sentence in enumerate(to_predict)
             ]
-        if return_logits:
+        if return_probas:
             preds = model_outputs
         sources_tags, targets_tags = post_process(preds, to_predict, args=self.args)
 
@@ -1352,7 +1352,3 @@ class MicroTransQuestModel:
 
     def get_named_parameters(self):
         return [n for n, p in self.model.named_parameters()]
-
-    @staticmethod
-    def _sigmoid(x):
-        return 1 / (1 + math.exp(-x))
