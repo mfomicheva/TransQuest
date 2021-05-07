@@ -1100,7 +1100,7 @@ class MicroTransQuestModel:
             )
             word_tokens.append(w_log)
 
-        get_logits = lambda tok: tok[0][1] if return_probas else tok
+        get_logits = lambda tok: tok[0][1].item() if return_probas else tok
         if split_on_space:
             model_outputs = [
                 [{word: get_logits(word_tokens[i][j])} for j, word in enumerate(sentence.split()[: len(preds_list[i])])]
