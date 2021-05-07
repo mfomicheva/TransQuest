@@ -1,0 +1,828 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
+    
+    
+      
+        <title>Sentence-level - TransQuest</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bde7dde4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sentence-level-transquest-architectures" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="TransQuest" class="md-header__button md-logo" aria-label="TransQuest" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            TransQuest
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Sentence-level
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/TharinduDR/TransQuest/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    tharindudr/TransQuest
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="TransQuest" class="md-nav__button md-logo" aria-label="TransQuest" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    TransQuest
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/TharinduDR/TransQuest/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    tharindudr/TransQuest
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../install/" class="md-nav__link">
+        Install
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      <label class="md-nav__link" for="__nav_3">
+        TransQuest Architectures
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="TransQuest Architectures" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          TransQuest Architectures
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Sentence-level
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Sentence-level
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-preparation" class="md-nav__link">
+    Data Preparation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monotransquest" class="md-nav__link">
+    MonoTransQuest
+  </a>
+  
+    <nav class="md-nav" aria-label="MonoTransQuest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimal-start-for-a-monotransquest-model" class="md-nav__link">
+    Minimal Start for a MonoTransQuest Model
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#siamesetransquest" class="md-nav__link">
+    SiameseTransQuest
+  </a>
+  
+    <nav class="md-nav" aria-label="SiameseTransQuest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimal-start-for-a-siamesetransquest-model" class="md-nav__link">
+    Minimal Start for a SiameseTransQuest Model
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../word_level_architecture/" class="md-nav__link">
+        Word-level
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/sentence_level_examples/" class="md-nav__link">
+        Sentence-level
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/word_level_examples/" class="md-nav__link">
+        Word-level
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Pre-trained Models
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Pre-trained Models" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Pre-trained Models
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/sentence_level_pretrained/" class="md-nav__link">
+        Sentence-level
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/word_level_pretrained/" class="md-nav__link">
+        Word-level
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contact/" class="md-nav__link">
+        Contact
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-preparation" class="md-nav__link">
+    Data Preparation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monotransquest" class="md-nav__link">
+    MonoTransQuest
+  </a>
+  
+    <nav class="md-nav" aria-label="MonoTransQuest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimal-start-for-a-monotransquest-model" class="md-nav__link">
+    Minimal Start for a MonoTransQuest Model
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#siamesetransquest" class="md-nav__link">
+    SiameseTransQuest
+  </a>
+  
+    <nav class="md-nav" aria-label="SiameseTransQuest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimal-start-for-a-siamesetransquest-model" class="md-nav__link">
+    Minimal Start for a SiameseTransQuest Model
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/TharinduDR/TransQuest/edit/master/docs/architectures/sentence_level_architectures.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="sentence-level-transquest-architectures">Sentence Level TransQuest Architectures</h1>
+<p>We have introduced two architectures for the sentence level QE in the TransQuest framework, both relies on the XLM-R transformer model.</p>
+<h3 id="data-preparation">Data Preparation</h3>
+<p>First read your data in to a pandas dataframe and format it so that it has three columns with headers text_a, text_b and labels. text_a is the source text, text_b is the target text and labels are the quality scores as in the following table.</p>
+<table>
+<thead>
+<tr>
+<th>text_a</th>
+<th>text_b</th>
+<th>labels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>නමුත් 1170 සිට 1270 දක්වා රජය පාලනය කරන ලද්දේ යුධ නායකයින් විසිනි.</td>
+<td>But from 1170 to 1270 the government was controlled by warlords.</td>
+<td>0.8833</td>
+</tr>
+<tr>
+<td>ව්‍යංගයෙන් ගිවිසුමක් යනු කොන්දේසි වචනයෙන් විස්තර නොකරන ලද එක් අවස්ථාවකි.</td>
+<td>A contract from the constitution is one of the occasions in which the term is not described.</td>
+<td>0.6667</td>
+</tr>
+</tbody>
+</table>
+<p>Now, you can consider following architectures to build the QE model.</p>
+<h2 id="monotransquest">MonoTransQuest</h2>
+<p>The first architecture proposed uses a single XLM-R transformer model. The input of this model is a concatenation of the original sentence and its translation, separated by the <em>[SEP]</em> token. Then the output of the <em>[CLS]</em> token is passed through a softmax layer to reflect the quality scores.</p>
+<p><img alt="MonoTransQuest Architecture" src="../../images/MonoTransQuest.png" /></p>
+<h3 id="minimal-start-for-a-monotransquest-model">Minimal Start for a MonoTransQuest Model</h3>
+<p>Initiate and train the model like in the following code. train_df and eval_df are the pandas dataframes prepared with the instructions in Data Preparation section.</p>
+<p><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transquest.algo.sentence_level.monotransquest.evaluation</span> <span class="kn">import</span> <span class="n">pearson_corr</span><span class="p">,</span> <span class="n">spearman_corr</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span>
+<span class="kn">from</span> <span class="nn">transquest.algo.sentence_level.monotransquest.run_model</span> <span class="kn">import</span> <span class="n">MonoTransQuestModel</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">MonoTransQuestModel</span><span class="p">(</span><span class="s2">&quot;xlmroberta&quot;</span><span class="p">,</span> <span class="s2">&quot;xlm-roberta-large&quot;</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_cuda</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">(),</span>
+                               <span class="n">args</span><span class="o">=</span><span class="n">monotransquest_config</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">eval_df</span><span class="o">=</span><span class="n">eval_df</span><span class="p">,</span> <span class="n">pearson_corr</span><span class="o">=</span><span class="n">pearson_corr</span><span class="p">,</span> <span class="n">spearman_corr</span><span class="o">=</span><span class="n">spearman_corr</span><span class="p">,</span>
+                              <span class="n">mae</span><span class="o">=</span><span class="n">mean_absolute_error</span><span class="p">)</span>
+</code></pre></div>
+</td></tr></table>
+An example monotransquest_config is available <a href="https://github.com/TharinduDR/TransQuest/blob/master/examples/sentence_level/wmt_2020/ro_en/monotransquest_config.py">here.</a>. The best model will be saved to the path specified in the "best_model_dir" in monotransquest_config. Then you can load it and do the predictions like this. </p>
+<p><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transquest.algo.sentence_level.monotransquest.run_model</span> <span class="kn">import</span> <span class="n">MonoTransQuestModel</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">MonoTransQuestModel</span><span class="p">(</span><span class="s2">&quot;xlmroberta&quot;</span><span class="p">,</span> <span class="n">monotransquest_config</span><span class="p">[</span><span class="s2">&quot;best_model_dir&quot;</span><span class="p">],</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">use_cuda</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">())</span>
+
+<span class="n">predictions</span><span class="p">,</span> <span class="n">raw_outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+</code></pre></div>
+</td></tr></table>
+Predictions are the predicted quality scores.</p>
+<h2 id="siamesetransquest">SiameseTransQuest</h2>
+<p>The second approach proposed in this framework relies on a Siamese architecture where we feed the original text and the translation into two separate XLM-R transformer models. </p>
+<p>Then the output of all the word embeddings goes through a mean pooling layer. After that we calculate the cosine similarity between the output of the pooling layers which reflects the quality of the translation.</p>
+<p><img alt="SiameseTransQuest Architecture" src="../../images/SiameseTransQuest.png" /></p>
+<h3 id="minimal-start-for-a-siamesetransquest-model">Minimal Start for a SiameseTransQuest Model</h3>
+<p>First save your train/dev pandas dataframes to csv files in a single folder. We refer the path to that folder as "path" in the code below. You have to provide the indices of source, target and quality labels when reading with the QEDataReader class. </p>
+<p><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transquest.algo.sentence_level.siamesetransquest</span> <span class="kn">import</span>  <span class="n">LoggingHandler</span><span class="p">,</span> <span class="n">SentencesDataset</span><span class="p">,</span> \
+    <span class="n">SiameseTransQuestModel</span>
+<span class="kn">from</span> <span class="nn">transquest.algo.sentence_level.siamesetransquest</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">losses</span>
+<span class="kn">from</span> <span class="nn">transquest.algo.sentence_level.siamesetransquest.evaluation</span> <span class="kn">import</span> <span class="n">EmbeddingSimilarityEvaluator</span>
+<span class="kn">from</span> <span class="nn">transquest.algo.sentence_level.siamesetransquest.readers</span> <span class="kn">import</span> <span class="n">QEDataReader</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="n">qe_reader</span> <span class="o">=</span> <span class="n">QEDataReader</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">s1_col_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s2_col_idx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                      <span class="n">score_col_idx</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                      <span class="n">normalize_scores</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">min_score</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_score</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">word_embedding_model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Transformer</span><span class="p">(</span><span class="s2">&quot;xlm-roberta-large&quot;</span><span class="p">,</span> <span class="n">max_seq_length</span><span class="o">=</span><span class="n">siamesetransquest_config</span><span class="p">[</span>
+                <span class="s1">&#39;max_seq_length&#39;</span><span class="p">])</span>
+
+<span class="n">pooling_model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Pooling</span><span class="p">(</span><span class="n">word_embedding_model</span><span class="o">.</span><span class="n">get_word_embedding_dimension</span><span class="p">(),</span>
+                                           <span class="n">pooling_mode_mean_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                           <span class="n">pooling_mode_cls_token</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                           <span class="n">pooling_mode_max_tokens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">SiameseTransQuestModel</span><span class="p">(</span><span class="n">modules</span><span class="o">=</span><span class="p">[</span><span class="n">word_embedding_model</span><span class="p">,</span> <span class="n">pooling_model</span><span class="p">])</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">SentencesDataset</span><span class="p">(</span><span class="n">qe_reader</span><span class="o">.</span><span class="n">get_examples</span><span class="p">(</span><span class="s1">&#39;train.tsv&#39;</span><span class="p">),</span> <span class="n">model</span><span class="p">)</span>
+<span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                          <span class="n">batch_size</span><span class="o">=</span><span class="n">siamesetransquest_config</span><span class="p">[</span><span class="s1">&#39;train_batch_size&#39;</span><span class="p">])</span>
+<span class="n">train_loss</span> <span class="o">=</span> <span class="n">losses</span><span class="o">.</span><span class="n">CosineSimilarityLoss</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">eval_data</span> <span class="o">=</span> <span class="n">SentencesDataset</span><span class="p">(</span><span class="n">examples</span><span class="o">=</span><span class="n">qe_reader</span><span class="o">.</span><span class="n">get_examples</span><span class="p">(</span><span class="s1">&#39;eval_df.tsv&#39;</span><span class="p">),</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<span class="n">eval_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">eval_data</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                         <span class="n">batch_size</span><span class="o">=</span><span class="n">siamesetransquest_config</span><span class="p">[</span><span class="s1">&#39;train_batch_size&#39;</span><span class="p">])</span>
+<span class="n">evaluator</span> <span class="o">=</span> <span class="n">EmbeddingSimilarityEvaluator</span><span class="p">(</span><span class="n">eval_dataloader</span><span class="p">)</span>
+
+<span class="n">warmup_steps</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span> <span class="o">*</span> <span class="n">siamesetransquest_config</span><span class="p">[</span><span class="s2">&quot;num_train_epochs&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">siamese_transformer_config</span><span class="p">[</span>
+                    <span class="s1">&#39;train_batch_size&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">)</span>
+
+
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_objectives</span><span class="o">=</span><span class="p">[(</span><span class="n">train_dataloader</span><span class="p">,</span> <span class="n">train_loss</span><span class="p">)],</span>
+                <span class="n">evaluator</span><span class="o">=</span><span class="n">evaluator</span><span class="p">,</span>
+                <span class="n">epochs</span><span class="o">=</span><span class="n">siamesetransquest_config</span><span class="p">[</span><span class="s1">&#39;num_train_epochs&#39;</span><span class="p">],</span>
+                <span class="n">evaluation_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                <span class="n">optimizer_params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="n">siamesetransquest_config</span><span class="p">[</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">],</span>
+                                        <span class="s1">&#39;eps&#39;</span><span class="p">:</span> <span class="n">siamesetransquest_config</span><span class="p">[</span><span class="s2">&quot;adam_epsilon&quot;</span><span class="p">],</span>
+                                        <span class="s1">&#39;correct_bias&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+                <span class="n">warmup_steps</span><span class="o">=</span><span class="n">warmup_steps</span><span class="p">,</span>
+                <span class="n">output_path</span><span class="o">=</span><span class="n">siamesetransquest_config</span><span class="p">[</span><span class="s1">&#39;best_model_dir&#39;</span><span class="p">])</span>
+</code></pre></div>
+</td></tr></table>
+An example siamese_transformer_config is available <a href="https://github.com/TharinduDR/TransQuest/blob/master/examples/wmt_2020/ro_en/siamese_transformer_config.py">here.</a>. The best model will be saved to the path specified in the "best_model_dir" in siamesetransquest_config. Then you can load it and do the predictions like this. </p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="n">test_data</span> <span class="o">=</span> <span class="n">SentencesDataset</span><span class="p">(</span><span class="n">examples</span><span class="o">=</span><span class="n">qe_reader</span><span class="o">.</span><span class="n">get_examples</span><span class="p">(</span><span class="s2">&quot;test.tsv&quot;</span><span class="p">,</span> <span class="n">test_file</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+            <span class="n">test_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+            <span class="n">evaluator</span> <span class="o">=</span> <span class="n">EmbeddingSimilarityEvaluator</span><span class="p">(</span><span class="n">test_dataloader</span><span class="p">)</span>
+
+            <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">evaluator</span><span class="p">,</span>
+                           <span class="n">result_path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">siamesetransquest_config</span><span class="p">[</span><span class="s1">&#39;cache_dir&#39;</span><span class="p">],</span> <span class="s2">&quot;test_result.txt&quot;</span><span class="p">),</span>
+                           <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+</td></tr></table>
+<p>You will find the predictions in the test_result.txt file in the siamesetransquest_config['cache_dir'] folder. </p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Now that you know about the architectures in TransQuest, check how we can apply it in WMT QE shared tasks <a href="https://tharindudr.github.io/TransQuest/examples/sentence_level_examples/">here.</a></p>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../../install/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Install
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../word_level_architecture/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Word-level
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
+      
+    
+  </body>
+</html>
