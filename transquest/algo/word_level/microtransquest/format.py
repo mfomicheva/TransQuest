@@ -38,8 +38,11 @@ def format_to_test(to_test, args):
         test_sentence = source_sentence + " " + "[SEP]"
         target_words = target_sentence.split()
         for target_word in target_words:
-            test_sentence = test_sentence + " " + args.tag + " " + target_word
-        test_sentence = test_sentence + " " + args.tag
+            if not args.no_gaps:
+                target_word = " " + args.tag + " " + target_word
+            test_sentence = test_sentence + target_word
+        if not args.no_gaps:
+            test_sentence = test_sentence + " " + args.tag
         test_sentences.append(test_sentence)
 
     return test_sentences

@@ -91,8 +91,9 @@ microtransquest_config = {
 
     "add_tag": False,
     "tag": "_",
+    "no_gaps": True,
 
-    "default_quality": "OK",
+    "default_quality": "0",
 
     "config": {},
     "local_rank": -1,
