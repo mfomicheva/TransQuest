@@ -1068,6 +1068,7 @@ class MicroTransQuestModel:
 
             eval_loss = eval_loss / nb_eval_steps
         token_logits = preds
+        token_logits = torch.sigmoid(token_logits)
         preds = np.argmax(preds, axis=2)
 
         label_map = {i: label for i, label in enumerate(self.args.labels_list)}
