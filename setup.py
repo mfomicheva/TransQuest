@@ -30,7 +30,7 @@ setup(
         "scikit-learn==0.23.1",
         "tensorboardx==2.1",
         "pandas==1.0.5",
-        "tokenizers==0.8.0",
+        "tokenizers==0.8.0-rc4",
         "matplotlib==3.2.2",
         "wandb==0.9.2",
         "googledrivedownloader==0.4"

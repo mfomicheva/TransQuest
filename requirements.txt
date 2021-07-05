@@ -4,7 +4,7 @@ requests==2.24.0
 tqdm==4.47.0
 regex==2020.6.8
 transformers==3.0.1
-tokenizers==0.8.0
+tokenizers==0.8.0-rc4
 scipy==1.5.1
 scikit-learn==0.23.1
 tensorboardX==2.1
